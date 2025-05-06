@@ -1,8 +1,10 @@
+
 import { useState } from 'react';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../components/navigation/Sidebar';
 import Header from '../components/navigation/Header';
 import '../styles/layouts/MainLayout.css';
+
 
 const MainLayout = ({ onLogout, toggleTheme, darkMode }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
