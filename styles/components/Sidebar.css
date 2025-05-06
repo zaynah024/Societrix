@@ -24,7 +24,7 @@
   padding: 0.75rem 1rem;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   height: var(--header-height);
-  background-color: #0a1828; /* Darker color to match the image */
+  background-color: #0a1828; 
 }
 
 .logo-container {
@@ -67,12 +67,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  outline: none; /* Remove default outline */
+  outline: none; 
 }
 
 .sidebar-toggle:focus {
-  outline: none; /* Ensure no outline appears on focus */
-  box-shadow: none; /* Remove any focus box-shadow some browsers might add */
+  outline: none; 
+  box-shadow: none; 
 }
 
 .sidebar-content {
