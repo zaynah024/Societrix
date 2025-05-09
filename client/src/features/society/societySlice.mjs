@@ -1,13 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = 'http://localhost:5000'; // Added fallback
+const API_URL = 'http://localhost:5000/api'; // Fixed incorrect double quotes
 
 const initialState = {
-  societies: [],
-  status: 'idle', // 'idle' | 'loading' | 'succeeded' | 'failed'
+  societies: [], 
+  status: 'idle', 
   error: null,
-  success: false, // Tracks success state for creating a society
+  success: false,
 };
 
 // Async thunk to create a new society
@@ -21,6 +21,25 @@ export const createSociety = createAsyncThunk('society/createSociety', async (so
     return res.data;
   } catch (error) {
     return rejectWithValue(error.response?.data?.message || 'Failed to create society');
+  }
+});
+
+// Async thunk to fetch societies
+export const fetchSocieties = createAsyncThunk('society/fetchSocieties', async (_, { rejectWithValue }) => {
+  try {
+    const res = await axios.get(`${API_URL}/societies`); // Corrected route
+    return res.data.societies; // Return the societies array from the response
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || 'Failed to fetch societies');
+  }
+});
+
+export const deleteSociety = createAsyncThunk('society/deleteSociety', async (societyId, { rejectWithValue }) => {
+  try {
+    const res = await axios.delete(`${API_URL}/societies/${societyId}`); // Corrected route
+    return societyId; // Return the deleted society ID
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || 'Failed to delete society');
   }
 });
 
@@ -43,13 +62,26 @@ const societySlice = createSlice({
       })
       .addCase(createSociety.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        state.societies.push(action.payload);
         state.success = true;
+        state.societies.push(action.payload); // Add the new society to the state
       })
-      .addCase(createSociety.rejected, (state, action) => {
+      .addCase(fetchSocieties.pending, (state) => {
+        state.status = 'loading';
+        state.error = null;
+      })
+      .addCase(fetchSocieties.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.societies = action.payload; // Update societies with fetched data
+      })
+      .addCase(fetchSocieties.rejected, (state, action) => {
         state.status = 'failed';
         state.error = action.payload;
-        state.success = false;
+      })
+      .addCase(deleteSociety.fulfilled, (state, action) => {
+        state.societies = state.societies.filter(society => society._id !== action.payload); // Remove deleted society
+      })
+      .addCase(deleteSociety.rejected, (state, action) => {
+        state.error = action.payload; // Handle delete error
       });
   },
 });

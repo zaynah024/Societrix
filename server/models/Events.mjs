@@ -1,12 +1,7 @@
 import mongoose from 'mongoose';
 
-const SocietySchema = new mongoose.Schema({
+const EventSchema = new mongoose.Schema({
     name: {
-        type: String,
-        required: true,
-        unique: true,
-    },
-    email:{
         type: String,
         required: true,
         unique: true,
@@ -15,23 +10,25 @@ const SocietySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    password:{
+    date: {
+        type: Date,
+        required: true,
+    },
+    time: {
         type: String,
         required: true,
     },
-    members: [{
+    location: {
+        type: String,
+        required: true,
+    },
+    societyId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-    }],
+        ref: 'societies',
+        required: true,
+    },
     createdAt: {
         type: Date,
         default: Date.now,
     },
-    ratings: {
-        type: mongoose.Schema.Types.Double,
-        default: 5.0,
-    }
 });
-
-const Society = mongoose.model('Society', SocietySchema);
-export default Society;

@@ -41,3 +41,33 @@ export const addSociety = async (req, res, next) => {
     next(error); // Pass the error to the error-handling middleware
   }
 };
+
+export const getSocieties = async (req, res, next) => {
+  try {
+    const societies = await Society.find(); // Fetch all societies from the database
+    res.status(200).json({ societies });
+  } catch (error) {
+    next(error); // Pass the error to the error-handling middleware
+  }
+};
+
+export const deleteSociety = async (req, res, next) => {
+  try {
+    const { id } = req.params; // Get the society ID from the request parameters
+
+    // Validate the ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid society ID' });
+    }
+
+    // Find and delete the society
+    const deletedSociety = await Society.findByIdAndDelete(id);
+    if (!deletedSociety) {
+      return res.status(404).json({ message: 'Society not found' });
+    }
+
+    res.status(200).json({ message: 'Society deleted successfully', society: deletedSociety });
+  } catch (error) {
+    next(error); // Pass the error to the error-handling middleware
+  }
+}

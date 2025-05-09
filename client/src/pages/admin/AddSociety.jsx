@@ -13,6 +13,7 @@ const AddSociety = () => {
     description: '',
     password: '12345678',
     members: [],
+    ratinngs: 5.0,
   });
 
   const handleChange = (e) => {
@@ -32,7 +33,6 @@ const AddSociety = () => {
     setFormData({
       name: '',
       email: '',
-      password: '',
       description: '',
     });
     dispatch(resetStatus());
