@@ -1,0 +1,103 @@
+.theme-toggle {
+  margin: 0 0.5rem;
+}
+
+.theme-toggle-button {
+  background: none;
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  color: var(--text-color);
+}
+
+.theme-toggle-button svg {
+  color: var(--text-color);
+}
+
+.toggle-text {
+  font-size: 0.8rem;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .toggle-text {
+    display: inline;
+  }
+}
+
+.theme-toggle-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  transform: scale(1.05);
+}
+
+.dark-mode .theme-toggle-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dark mode specific styles */
+:root {
+  --background-color: #ffffff;
+  --text-color: #333333;
+  --sidebar-bg: #f0f0f0;
+  --card-bg: #ffffff;
+  --border-color: #e0e0e0;
+  --accent-color: #7c3aed;
+  --accent-hover: #6d28d9;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --sidebar-active: rgba(124, 58, 237, 0.1);
+  --sidebar-active-text: #7c3aed;
+}
+
+.dark-mode {
+  --background-color: #121212;
+  --text-color: #f0f0f0;
+  --sidebar-bg: #1e1e1e;
+  --card-bg: #1e1e1e;
+  --border-color: #333333;
+  --accent-color: #7c3aed;
+  --accent-hover: #8b5cf6;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  --sidebar-active: rgba(124, 58, 237, 0.3);
+  --sidebar-active-text: #a78bfa;
+}
+
+/* Apply theme variables to elements */
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.card, .sidebar, .header, .content-area, .announcement-card, .event-card, .venue-card {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  box-shadow: var(--shadow);
+  transition: background-color 0.3s, border-color 0.3s, box-shadow 0.3s;
+}
+
+.sidebar {
+  background-color: var(--sidebar-bg);
+}
+
+button, .button {
+  background-color: var(--accent-color);
+  color: white;
+  transition: background-color 0.3s;
+}
+
+button:hover, .button:hover {
+  background-color: var(--accent-hover);
+}
+
+input, select, textarea {
+  background-color: var(--card-bg);
+  border-color: var(--border-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
