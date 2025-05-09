@@ -1,0 +1,304 @@
+:root {
+  --primary-color: #000000;
+  --secondary-color: #025BCF;
+  --accent-color: #148CAD;
+  --text-color: #333;
+  --bg-color: #f5f5f5;
+  --sidebar-width: 250px;
+  --header-height: 60px;
+  --card-bg: white;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --border-color: #e0e0e0;
+}
+
+.dark-mode {
+  --primary-color: #000000;
+  --secondary-color: #16213e;
+  --accent-color: #57c2d5;
+  --text-color: #f0f0f0;
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --border-color: #333;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+/* App Layout */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---------- Button Styles ---------- */
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--accent-color);
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn:hover {
+  background-color: #57c2d5;
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+}
+
+.btn-outline:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.btn-danger {
+  background-color: #ef4444;
+}
+
+.btn-danger:hover {
+  background-color: #dc2626;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+}
+
+/* ------------------ LOGIN PAGE STYLES ------------------ */
+.login-page {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  
+}
+
+.login-page .login-card {
+  background-color: #000;
+  max-width: 400px;
+  border-radius: 8px;
+  padding: 30px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+ 
+}
+
+.login-page .logo {
+  width: 300px;
+  height: 300px;
+  margin-bottom: 0px;
+}
+
+.login-page .welcome {
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.login-page .input-group {
+  width: 100%;
+  border: 1px solid #4c4c4c;
+  border-radius: 4px;
+  height: 50px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  background-color: #000;
+}
+
+.login-page .input-group input,
+.login-page .input-group select {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  width: 100%;
+  font-size: 16px;
+}
+
+.login-page .remember-forgot {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.login-page .remember {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.login-page .checkbox {
+  background-color: #0091bd;
+  border-radius: 4px;
+  height: 20px;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 8px;
+}
+
+.login-page .forgot {
+  color: #aaa;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.login-page .login-button {
+  width: 100%;
+  height: 50px;
+  background-image: linear-gradient(to right, #025BCF, #2F847F);
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: bold;
+}
+
+/* ---------------- CREATE NEW PASSWORD STYLES ---------------- */
+.create-new-password {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  height: 100vh;
+  width: 100vw;
+}
+
+.create-new-password .form-container {
+  background-color: #000;
+  padding: 40px;
+  border-radius: 10px;
+  max-width: 500px;
+  text-align: center;
+}
+
+.create-new-password .logo {
+  width: 300px;
+  height: 300px;
+  margin-bottom: 0px;
+}
+
+.create-new-password .title {
+  color: #fff;
+  font-size: 32px;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
+.create-new-password .input-wrapper {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.create-new-password .password-input {
+  width: 100%;
+  padding: 14px 50px 14px 18px;
+  font-size: 16px;
+  background-color: #222;
+  border: 1px solid #4c4c4c;
+  border-radius: 4px;
+  color: white;
+  outline: none;
+}
+
+.create-new-password .toggle-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.create-new-password .toggle-icon img {
+  width: 20px;
+  height: 16px;
+}
+
+.create-new-password .confirm-button {
+  background-image: linear-gradient(to right, #025BCF, #2F847F);
+  color: white;
+  border: none;
+  padding: 14px 20px;
+  border-radius: 6px;
+  font-size: 18px;
+  font-weight: bold;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
