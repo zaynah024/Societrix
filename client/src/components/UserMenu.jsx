@@ -1,8 +1,9 @@
 import React from "react";
 
 import { useState, useRef, useEffect } from 'react';
-import { Link } from 'wouter';
+import { Link } from 'react-router-dom';
 import "../styles/pages/society/UserMenu.css";
+
 
 const UserMenu = ({ onChatOpen }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,10 +39,10 @@ const UserMenu = ({ onChatOpen }) => {
       
       {isOpen && (
         <div className="user-dropdown">
-          <Link href="/my-account" onClick={() => setIsOpen(false)}>My Account</Link>
-          <Link href="/settings" onClick={() => setIsOpen(false)}>Profile</Link>
-          <Link href="/settings" onClick={() => setIsOpen(false)}>Settings</Link>
-          <Link href="/chat" onClick={() => setIsOpen(false)}>Chat</Link>
+          <Link to="/my-account" onClick={() => setIsOpen(false)}>My Account</Link>
+          <Link to="/settings" onClick={() => setIsOpen(false)}>Profile</Link>
+          <Link to="/settings" onClick={() => setIsOpen(false)}>Settings</Link>
+          <Link to="/chat" onClick={() => setIsOpen(false)}>Chat</Link>
           <div 
             className="user-dropdown-item" 
             onClick={() => {
@@ -52,7 +53,7 @@ const UserMenu = ({ onChatOpen }) => {
             Quick Chat
           </div>
           <div className="dropdown-divider"></div>
-          <Link href="/logout" onClick={() => setIsOpen(false)}>Logout</Link>
+          <Link to="/logout" onClick={() => setIsOpen(false)}>Logout</Link>
         </div>
       )}
     </div>

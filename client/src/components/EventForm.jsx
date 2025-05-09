@@ -43,8 +43,7 @@ const EventForm = ({ onClose }) => {
   
   const createEventMutation = useMutation({
     mutationFn: async (data) => {
-      // For attachments, we would normally upload the files to a service
-      // and store the file references/URLs in the database
+      
       const eventPayload = {
         title: data.title,
         description: data.description,
