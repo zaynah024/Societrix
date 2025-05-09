@@ -43,6 +43,15 @@ export const deleteSociety = createAsyncThunk('society/deleteSociety', async (so
   }
 });
 
+export const editDescription = createAsyncThunk('society/editDescription', async ({ id, description }, { rejectWithValue }) => {
+  try {
+    const res = await axios.patch(`${API_URL}/societies/${id}`, { description }); // Corrected route
+    return res.data.society; // Return the updated society
+  } catch (error) {
+    return rejectWithValue(error.response?.data?.message || 'Failed to edit description');
+  }
+});
+
 const societySlice = createSlice({
   name: 'society',
   initialState,
@@ -82,6 +91,15 @@ const societySlice = createSlice({
       })
       .addCase(deleteSociety.rejected, (state, action) => {
         state.error = action.payload; // Handle delete error
+      })
+      .addCase(editDescription.fulfilled, (state, action) => {
+        const index = state.societies.findIndex(society => society._id === action.payload._id);
+        if (index !== -1) {
+          state.societies[index] = action.payload; // Update the edited society
+        }
+      })
+      .addCase(editDescription.rejected, (state, action) => {
+        state.error = action.payload; // Handle edit error
       });
   },
 });

@@ -71,3 +71,30 @@ export const deleteSociety = async (req, res, next) => {
     next(error); // Pass the error to the error-handling middleware
   }
 }
+
+export const editDescription = async (req, res, next) => {
+  try {
+    const { id } = req.params; // Get the society ID from the request parameters
+    const { description } = req.body; // Get the new description from the request body
+
+    // Validate the ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid society ID' });
+    }
+
+    // Find and update the society's description
+    const updatedSociety = await Society.findByIdAndUpdate(
+      id,
+      { description },
+      { new: true } // Return the updated document
+    );
+
+    if (!updatedSociety) {
+      return res.status(404).json({ message: 'Society not found' });
+    }
+
+    res.status(200).json({ message: 'Description updated successfully', society: updatedSociety });
+  } catch (error) {
+    next(error); // Pass the error to the error-handling middleware
+  }
+};

@@ -1,4 +1,4 @@
-/* Layout.css */
+/* Layout.css
 .app-layout {
   display: flex;
   height: 100vh;
@@ -20,7 +20,6 @@
   background-color: #f9fafb;
 }
 
-/* Make the whole layout responsive */
 @media (max-width: 767px) {
   .app-layout {
     flex-direction: column;
@@ -29,4 +28,4 @@
   .main-content {
     padding: 16px;
   }
-}
+} */

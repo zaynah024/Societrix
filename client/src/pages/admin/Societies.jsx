@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import '../../styles/pages/admin/Societies.css';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSocieties, resetStatus, deleteSociety } from '../../features/society/societySlice';
+import { fetchSocieties, resetStatus, deleteSociety, editDescription } from '../../features/society/societySlice';
 
 const Societies = () => {
   const dispatch = useDispatch();
@@ -22,8 +22,8 @@ const Societies = () => {
 
   useEffect(() => {
     if (success) {
-      dispatch(fetchSocieties()); // Re-fetch societies when a new one is added
-      dispatch(resetStatus()); // Reset the success state to avoid repeated fetching
+      dispatch(fetchSocieties());
+      dispatch(resetStatus());
     }
   }, [dispatch, success]);
 
@@ -50,7 +50,7 @@ const Societies = () => {
 
   const handleSaveDescription = () => {
     // Mock implementation for saving a description
-    setSelectedSociety(null);
+    dispatch(editDescription({ id: selectedSociety._id, description: editFormData.description }));
     setShowEditModal(false);
   };
 
