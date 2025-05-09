@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from "../../lib/queryClient";
 import AnnouncementItem from "../../components/AnnouncementItem";
+import '../../styles/pages/society/Announcements.css';
 
 const Announcements = () => {
   const [newAnnouncementOpen, setNewAnnouncementOpen] = useState(false);
@@ -55,14 +56,14 @@ const Announcements = () => {
   
   return (
     <div>
-      <div className="page-header flex flex-col md:flex-row md:items-center md:justify-between">
+      <div className="page-header flex justify-between items-center mb-6">
         <div>
           <h1 className="page-title">Announcements</h1>
           <p className="page-description">Important updates and notices for all societies</p>
         </div>
         
         <button 
-          className="btn btn-primary mt-4 md:mt-0"
+          className="btn btn-primary"
           onClick={() => setNewAnnouncementOpen(true)}
         >
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" className="mr-2">

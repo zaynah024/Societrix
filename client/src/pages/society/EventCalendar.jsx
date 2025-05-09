@@ -1,9 +1,10 @@
 import React from "react";
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { getCalendarDays, formatMonthYear, isDateToday, formatDate, getStatusBadgeClass } from "../../lib/utils";
+import { getCalendarDays, formatMonthYear, isDateToday } from "../../lib/utils";
 import EventForm from "../../components/EventForm";
 import EventReportForm from "../../components/EventReportForm";
+import "../../styles/pages/society/EventCalender.css"
 
 const EventCalendar = () => {
   const currentDate = new Date();
@@ -76,18 +77,19 @@ const EventCalendar = () => {
     setSelectedEvent(null);
   };
   
+  // Format the selected date for display
+  const formattedSelectedDate = `${selectedDate.toLocaleString('default', { month: 'long' })} ${selectedDate.getDate()}, ${selectedDate.getFullYear()}`;
+  
   return (
     <div>
-      <div className="page-header flex flex-col md:flex-row md:items-center md:justify-between">
+      <div className="page-header">
         <div>
           <h1 className="page-title">Event Calendar</h1>
           <p className="page-description">View and manage upcoming society events</p>
         </div>
         
-        <button className="btn btn-primary mt-4 md:mt-0" onClick={handleRequestEvent}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" className="mr-2">
-            <path fillRule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clipRule="evenodd" />
-          </svg>
+        <button className="btn-teal" onClick={handleRequestEvent}>
+          <span className="plus-icon">+</span>
           Request New Event
         </button>
       </div>
@@ -104,38 +106,33 @@ const EventCalendar = () => {
         </div>
       )}
       
-      <div className="calendar-layout">
-        {/* Calendar Widget */}
-        <div className="card">
+      <div className="calendar-container">
+        <div className="calendar-card">
           <div className="calendar-header">
             <button className="calendar-nav-button" onClick={previousMonth}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
-              </svg>
+              &lt;
             </button>
             
             <h2 className="calendar-title">{formatMonthYear(new Date(selectedYear, selectedMonth))}</h2>
             
             <button className="calendar-nav-button" onClick={nextMonth}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />
-              </svg>
+              &gt;
             </button>
           </div>
           
           {/* Calendar days header */}
-          <div className="calendar-days">
-            <div className="calendar-weekday">Su</div>
-            <div className="calendar-weekday">Mo</div>
-            <div className="calendar-weekday">Tu</div>
-            <div className="calendar-weekday">We</div>
-            <div className="calendar-weekday">Th</div>
-            <div className="calendar-weekday">Fr</div>
-            <div className="calendar-weekday">Sa</div>
+          <div className="calendar-weekdays">
+            <div className="weekday">Su</div>
+            <div className="weekday">Mo</div>
+            <div className="weekday">Tu</div>
+            <div className="weekday">We</div>
+            <div className="weekday">Th</div>
+            <div className="weekday">Fr</div>
+            <div className="weekday">Sa</div>
           </div>
           
           {/* Calendar days grid */}
-          <div className="calendar-days">
+          <div className="calendar-grid">
             {calendarDays.map((day, index) => {
               const isSelected = day.date.toDateString() === selectedDate.toDateString();
               const isToday = isDateToday(day.date);
@@ -149,47 +146,44 @@ const EventCalendar = () => {
               return (
                 <div 
                   key={index}
-                  className={`calendar-day ${!day.isCurrentMonth ? 'inactive' : ''} ${isSelected ? 'selected' : ''} ${isToday && !isSelected ? 'today' : ''} ${hasEvents ? 'has-events' : ''}`}
+                  className={`day-cell ${!day.isCurrentMonth ? 'inactive' : ''} ${isSelected ? 'selected' : ''} ${isToday && !isSelected ? 'today' : ''} ${hasEvents ? 'has-events' : ''}`}
                   onClick={() => day.isCurrentMonth && selectDay(day.date)}
                 >
                   {day.date.getDate()}
-                  {hasEvents && <span className="event-indicator"></span>}
                 </div>
               );
             })}
           </div>
           
-          <div style={{ marginTop: '24px' }}>
-            <button className="btn btn-primary btn-block" onClick={handleRequestEvent}>
-              Request New Event
-            </button>
-          </div>
+          <button className="request-event-button" onClick={handleRequestEvent}>
+            Request New Event
+          </button>
         </div>
         
         {/* Selected Day Events */}
-        <div className="card">
-          <h2 className="text-lg font-medium mb-6">{formatDate(selectedDate)}</h2>
+        <div className="day-events-card">
+          <h2 className="day-header">{formattedSelectedDate}</h2>
           
           {isLoadingEvents ? (
-            <div className="loading-screen" style={{ height: '160px' }}>
+            <div className="loading-spinner-container">
               <div className="loading-spinner"></div>
               <p>Loading events...</p>
             </div>
           ) : selectedDateEvents.length > 0 ? (
-            <div className="space-y-4">
+            <div className="events-list">
               {selectedDateEvents.map(event => (
-                <div key={event.id} className="border border-gray-200 rounded-lg p-4">
-                  <h3 className="font-medium">{event.title}</h3>
-                  <p className="text-gray-500 text-sm mt-1">{event.description}</p>
-                  <div className="mt-2 flex justify-between">
-                    <span className={getStatusBadgeClass(event.status)}>
+                <div key={event.id} className="event-item">
+                  <h3 className="event-title">{event.title}</h3>
+                  <p className="event-description">{event.description}</p>
+                  <div className="event-actions">
+                    <span className={`event-status ${event.status}`}>
                       {event.status.charAt(0).toUpperCase() + event.status.slice(1)}
                     </span>
-                    <div className="flex gap-2">
-                      <button className="text-primary text-sm">View Details</button>
+                    <div className="event-buttons">
+                      <button className="event-action-btn">View Details</button>
                       {event.status === 'approved' && (
                         <button 
-                          className="text-primary text-sm ml-3"
+                          className="event-action-btn"
                           onClick={() => handleSubmitReport(event)}
                         >
                           Submit Report
@@ -201,7 +195,7 @@ const EventCalendar = () => {
               ))}
             </div>
           ) : (
-            <div className="flex items-center justify-center h-40 text-gray-500">
+            <div className="no-events">
               <p>No events scheduled for this day</p>
             </div>
           )}

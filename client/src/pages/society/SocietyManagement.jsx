@@ -1,35 +1,91 @@
-import React from "react";
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
+
+import '../../styles/pages/society/SocietyManagement.css';
+
+// Default empty society for when no data is available
+const emptySociety = {
+  id: 1,
+  name: "New Society",
+  description: "No description available. Add information about your society to help members understand its purpose and activities.",
+  foundedYear: new Date().getFullYear(),
+  memberCount: 0,
+  eventCount: 0,
+  logoInitials: "NS"
+};
 
 const SocietyManagement = () => {
   const [activeTab, setActiveTab] = useState('about');
-  const [selectedSociety, setSelectedSociety] = useState(null);
+  const [selectedSociety, setSelectedSociety] = useState(emptySociety);
   
-  const { data: societies, isLoading } = useQuery({
+  // Fetch societies data from API
+  const { data: societies, isLoading, error } = useQuery({
     queryKey: ['/api/societies'],
+    staleTime: 60000, // 1 minute
     onSuccess: (data) => {
-      if (data && data.length > 0 && !selectedSociety) {
+      if (data && data.length > 0) {
         setSelectedSociety(data[0]);
       }
     }
   });
   
-  if (isLoading || !selectedSociety) {
-    return (
-      <div className="loading-screen">
-        <div className="loading-spinner"></div>
-        <p>Loading society data...</p>
-      </div>
-    );
-  }
+  // Log any errors for debugging
+  useEffect(() => {
+    if (error) {
+      console.error('Error fetching societies:', error);
+    }
+  }, [error]);
+  
+  // Get the list of societies to display (either from API or empty)
+  const displaySocieties = societies && societies.length > 0 ? societies : [emptySociety];
   
   return (
     <div>
       <div className="page-header">
         <h1 className="page-title">Society Management</h1>
         <p className="page-description">Manage society details, members, and activities</p>
+      </div>
+
+      {isLoading && (
+        <div className="status-info">
+          <div className="loading-spinner-small"></div>
+          <span>Loading society data...</span>
+        </div>
+      )}
+
+      {error && (
+        <div className="status-info error">
+          <span>Could not load societies data. Using default view.</span>
+        </div>
+      )}
+      
+      {/* Society selector */}
+      <div className="society-selector">
+        <label htmlFor="society-select">Select Society: </label>
+        <select 
+          id="society-select" 
+          className="select-dropdown"
+          value={selectedSociety.id}
+          onChange={(e) => {
+            const id = Number(e.target.value);
+            const society = displaySocieties.find(s => s.id === id);
+            if (society) {
+              setSelectedSociety(society);
+            }
+          }}
+        >
+          {displaySocieties.map(society => (
+            <option key={society.id} value={society.id}>
+              {society.name}
+            </option>
+          ))}
+        </select>
+        <button className="btn btn-primary ml-4">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 20 20" fill="currentColor" className="mr-2">
+            <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+          </svg>
+          Add New Society
+        </button>
       </div>
       
       <div className="card">
@@ -89,7 +145,7 @@ const SocietyManagement = () => {
                 <li>Provide mentorship for junior students</li>
               </ul>
               
-              <div style={{ display: 'flex', gap: '16px', marginTop: '32px' }}>
+              <div className="society-button-group">
                 <button className="btn btn-secondary">
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" className="mr-2">
                     <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z" />

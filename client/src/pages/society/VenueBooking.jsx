@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from "../../lib/queryClient";
 import VenueCard from "../../components/VenueCard";
+import '../../styles/pages/society/VenueBooking.css';
 
 const VenueBooking = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -75,13 +76,13 @@ const VenueBooking = () => {
   
   return (
     <div>
-      <div className="page-header flex flex-col md:flex-row md:items-center md:justify-between">
+      <div className="page-header flex justify-between items-center mb-6">
         <div>
           <h1 className="page-title">Venue Booking</h1>
           <p className="page-description">Search and book venues for your events</p>
         </div>
         
-        <button className="btn btn-secondary mt-4 md:mt-0">
+        <button className="btn btn-secondary">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" className="mr-2">
             <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
           </svg>
@@ -90,25 +91,25 @@ const VenueBooking = () => {
       </div>
       
       {/* Venue Search & Filters */}
-      <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <div className="relative flex-grow">
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor" className="text-gray-400">
+      <div className="venue-filters mb-6">
+        <div className="search-field">
+          <div className="search-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
               <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
             </svg>
           </div>
           <input 
             type="text" 
             placeholder="Search venues..." 
-            className="form-input pl-10" 
+            className="search-input" 
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
         
-        <div className="flex flex-col md:flex-row gap-4">
+        <div className="filter-buttons">
           <select 
-            className="form-select" 
+            className="capacity-filter" 
             value={capacityFilter}
             onChange={(e) => setCapacityFilter(e.target.value)}
           >
@@ -119,7 +120,7 @@ const VenueBooking = () => {
           </select>
           
           <select 
-            className="form-select"
+            className="venue-filter"
             value={venueTypeFilter}
             onChange={(e) => setVenueTypeFilter(e.target.value)}
           >

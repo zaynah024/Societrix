@@ -1,8 +1,34 @@
 import React from "react";
 
-import { useState } from 'react';
+import { useState,useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { apiRequest } from "../../lib/queryClient";
+
+
+const applyFontSize = (size) => {
+  let rootFontSize;
+  switch(size) {
+    case 'small':
+      rootFontSize = '14px';
+      break;
+    case 'large':
+      rootFontSize = '18px';
+      break;
+    case 'medium':
+    default:
+      rootFontSize = '16px';
+  }
+  
+  // Apply font size to html element
+  document.documentElement.style.fontSize = rootFontSize;
+  
+  // Also add class for additional styling if needed
+  document.documentElement.classList.remove('font-small', 'font-medium', 'font-large');
+  document.documentElement.classList.add(`font-${size}`);
+  
+  // Apply font size to body for better coverage
+  document.body.style.fontSize = rootFontSize;
+};
 
 const Settings = () => {
   const [activeTab, setActiveTab] = useState('profile');
@@ -13,6 +39,20 @@ const Settings = () => {
     department: ''
   });
   const [isEditing, setIsEditing] = useState(false);
+  // Apply saved font size on component mount
+  useEffect(() => {
+    const savedFontSize = localStorage.getItem('fontSize') || 'medium';
+    document.documentElement.setAttribute('data-font-size', savedFontSize);
+    applyFontSize(savedFontSize);
+    
+    // Apply saved theme on component mount
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, []);
   
   const queryClient = useQueryClient();
   
@@ -101,12 +141,6 @@ const Settings = () => {
               onClick={() => setActiveTab('profile')}
             >
               Profile
-            </div>
-            <div 
-              className={`tab-item ${activeTab === 'notifications' ? 'active' : ''}`}
-              onClick={() => setActiveTab('notifications')}
-            >
-              Notifications
             </div>
             <div 
               className={`tab-item ${activeTab === 'appearance' ? 'active' : ''}`}
@@ -211,71 +245,65 @@ const Settings = () => {
           </div>
         )}
         
-        {activeTab === 'notifications' && (
-          <div className="society-tab-content">
-            <h3 className="text-lg font-medium mb-6">Notification Settings</h3>
-            <p className="text-sm text-gray-500 mb-6">Manage your notification preferences</p>
-            
-            <div className="space-y-4 max-w-2xl">
-              <div className="form-group">
-                <label className="inline-flex items-center">
-                  <input type="checkbox" className="mr-2" defaultChecked />
-                  <span>Email notifications for new announcements</span>
-                </label>
-              </div>
-              <div className="form-group">
-                <label className="inline-flex items-center">
-                  <input type="checkbox" className="mr-2" defaultChecked />
-                  <span>Email notifications for event updates</span>
-                </label>
-              </div>
-              <div className="form-group">
-                <label className="inline-flex items-center">
-                  <input type="checkbox" className="mr-2" defaultChecked />
-                  <span>Email notifications for venue booking confirmations</span>
-                </label>
-              </div>
-              <div className="form-group">
-                <label className="inline-flex items-center">
-                  <input type="checkbox" className="mr-2" />
-                  <span>Push notifications (browser)</span>
-                </label>
-              </div>
-              
-              <button type="button" className="btn btn-primary mt-4">
-                Save Notification Settings
-              </button>
-            </div>
-          </div>
-        )}
+        
         
         {activeTab === 'appearance' && (
           <div className="society-tab-content">
-            <h3 className="text-lg font-medium mb-6">Appearance Settings</h3>
-            <p className="text-sm text-gray-500 mb-6">Customize your application appearance</p>
+            <h3 className="settings-section-title">Appearance Settings</h3>
+            <p className="settings-description">Customize your application appearance</p>
             
-            <div className="space-y-4 max-w-2xl">
+            <div className="settings-form">
               <div className="form-group">
                 <label htmlFor="theme" className="form-label">Theme</label>
-                <select id="theme" className="form-select">
+                <select 
+                  id="theme" 
+                  className="form-select"
+                  value={localStorage.getItem('theme') || 'light'}
+                  onChange={(e) => {
+                    const newTheme = e.target.value;
+                    localStorage.setItem('theme', newTheme);
+                    
+                    // Apply theme immediately
+                    if (newTheme === 'dark') {
+                      document.body.classList.add('dark-mode');
+                    } else {
+                      document.body.classList.remove('dark-mode');
+                    }
+                  }}
+                >
                   <option value="light">Light</option>
                   <option value="dark">Dark</option>
-                  <option value="system">System Default</option>
                 </select>
               </div>
               
               <div className="form-group">
                 <label htmlFor="fontSize" className="form-label">Font Size</label>
-                <select id="fontSize" className="form-select">
+                <select 
+                  id="fontSize" 
+                  className="form-select"
+                  value={localStorage.getItem('fontSize') || 'medium'}
+                  onChange={(e) => {
+                    const newSize = e.target.value;
+                    localStorage.setItem('fontSize', newSize);
+                    
+                    // Apply font size immediately
+                    document.documentElement.setAttribute('data-font-size', newSize);
+                    applyFontSize(newSize);
+                  }}
+                >
                   <option value="small">Small</option>
-                  <option value="medium" selected>Medium</option>
+                  <option value="medium">Medium</option>
                   <option value="large">Large</option>
                 </select>
               </div>
               
-              <button type="button" className="btn btn-primary mt-4">
-                Save Appearance Settings
-              </button>
+
+              
+              <div className="form-actions">
+                <button type="button" className="btn btn-primary">
+                  Reset to Default
+                </button>
+              </div>
             </div>
           </div>
         )}
