@@ -12,14 +12,84 @@
 }
 
 .welcome-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 2rem;
 }
 
+@keyframes welcomeGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
 .welcome-section h2 {
-  font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  font-size: 2rem;
-  color: var(--text-color);
-  font-weight: 500;
+  font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 2.25rem;
+  font-weight: 600;
+  margin: 0;
+  position: relative;
+  padding: 0.25rem 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-align: center;
+  
+  /* Gradient animation */
+  background: linear-gradient(
+    90deg,
+    var(--text-color) 0%,
+    var(--accent-color) 35%,
+    var(--text-color) 65%,
+    var(--accent-color) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: welcomeGradient 5s ease infinite;
+  
+  /* Add subtle depth */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+/* Elegant underline effect */
+.welcome-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-color) 50%,
+    transparent 100%
+  );
+  opacity: 0.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .welcome-section h2 {
+    font-size: 1.75rem;
+    background-size: 300% auto;
+  }
+  
+  .welcome-section h2::after {
+    width: 80%;
+    height: 1px;
+  }
 }
 
 .dashboard-stats {

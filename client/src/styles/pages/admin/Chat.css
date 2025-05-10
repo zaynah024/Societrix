@@ -1,20 +1,25 @@
 .chat-page {
   width: 100%;
+  height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
 }
 
 .chat-container {
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  width: 100%;
-  height: 85%;
-  max-width: 1200px;
+  width: 1000px;
+  height: 80vh;
+  max-width: 90%;
   background-color: var(--card-bg);
   border-radius: 10px;
   box-shadow: var(--card-shadow);
+  margin: 0 auto;
+  position: relative;
+  overflow: hidden;
 }
 
 /* Sidebar styles */
@@ -197,13 +202,14 @@
 }
 
 .admin-message {
-  align-items: flex-end;
-  margin-left: auto;
-  justify-content: flex-end;
+  align-self: flex-end;
+  margin-right: 0;
+  padding-right: 0;
 }
 
 .society-message {
   align-self: flex-start;
+  margin-right: auto;
 }
 
 .message-content {
@@ -213,14 +219,21 @@
 }
 
 .admin-message .message-content {
-  background-color: rgba(59, 130, 246, 0.1);
-  border-bottom-right-radius: 0.25rem;
+  background-color: #3b82f6;
+  color: white;
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 0;
 }
 
 .society-message .message-content {
-  background-color: var(--accent-color);
-  color: white;
-  border-bottom-left-radius: 0.25rem;
+  background-color: #f3f4f6;
+  color: #111827;
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 0;
 }
 
 .message-sender {
@@ -312,14 +325,17 @@
   padding-bottom: 22px;
 }
 
+.send-button:hover {
+  background-color: rgba(0, 0, 0, 0.184);
+}
+
 .send-button.active {
   background-color: var(--accent-color);
   color: white;
-  opacity: 1;
 }
 
 .send-icon {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 /* Responsive design */

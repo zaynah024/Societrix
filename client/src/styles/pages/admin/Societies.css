@@ -18,7 +18,7 @@
   display: flex;
   align-items: center;
   position: relative;
-  width: 300px;
+  width: 500px;
 }
 
 .search-input {
@@ -41,7 +41,7 @@
 
 .search-btn {
   position: absolute;
-  right: 0.75rem;
+  right: 0.5rem; /* Moved further to the right (was 0.75rem) */
   top: 50%;
   transform: translateY(-50%);
   background: none;
@@ -50,6 +50,23 @@
   color: var(--text-color);
   opacity: 0.6;
   cursor: pointer;
+  padding: 0.5rem; /* Added padding to create a larger hit area */
+  border-radius: 50%; /* Makes the hover effect circular */
+  transition: opacity 0.2s, background-color 0.2s, transform 0.1s; /* Added transitions */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 11px;
+}
+
+.search-btn:hover {
+  opacity: 1; /* Increased opacity on hover */
+  background-color: rgba(0, 0, 0, 0.05); /* Subtle background on hover */
+  transform: translateY(-50%) scale(1.1); /* Slight scale effect */
+}
+
+.search-btn:active {
+  transform: translateY(-50%) scale(0.95); /* Press effect */
 }
 
 .no-societies {
@@ -62,10 +79,14 @@
   box-shadow: var(--card-shadow);
 }
 
+/* Changed from grid to flex with column direction */
 .societies-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .society-card {
@@ -76,6 +97,8 @@
   display: flex;
   flex-direction: column;
   transition: transform 0.2s;
+  border: 1px solid var(--border-color);
+  width: 100%;
 }
 
 .society-card:hover {
@@ -182,8 +205,10 @@
     width: 100%;
   }
   
+  /* Removed grid-template-columns since we're using flex now */
   .societies-grid {
-    grid-template-columns: 1fr;
+    width: 100%;
+    max-width: 100%;
   }
   
   .society-actions {
