@@ -29,7 +29,7 @@ const SocietySchema = new mongoose.Schema({
     },
     rating: { 
         type: Number,
-        default: 0.0, // Initialize with 0
+        default: 5.0, 
     }
 });
 

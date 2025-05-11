@@ -11,18 +11,95 @@ const initialState = {
 };
 
 // Async thunk to create a new society
-export const createSociety = createAsyncThunk('society/createSociety', async (societyData, { rejectWithValue }) => {
-  try {
-    const res = await axios.post(`${API_URL}/add-society`, societyData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-    return res.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data?.message || 'Failed to create society');
+export const createSociety = createAsyncThunk(
+  'society/createSociety', 
+  async (societyData, { rejectWithValue, dispatch }) => {
+    try {
+      const res = await axios.post(`${API_URL}/add-society`, societyData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      // After successful society creation, create a chat for this society
+      const newSociety = res.data;
+      
+      // Create chat for the new society
+      try {
+        const chatData = {
+          chatId: `society-${newSociety._id}`,
+          chatName: newSociety.name,
+          chatType: 'society',
+          avatar: getAvatarForSociety(newSociety.name),
+          members: [
+            { userId: 'admin', role: 'admin' },
+            { userId: `society-${newSociety._id}`, role: 'society' }
+          ]
+        };
+        
+        await axios.post(`http://localhost:5000/api/chat/users`, chatData);
+        console.log('Chat created for new society:', newSociety.name);
+        
+        // Create welcome message in the new chat
+        const welcomeMessage = {
+          sender: 'admin',
+          content: `Welcome ${newSociety.name}! This is your private chat with the admin.`,
+          isAdmin: true,
+          chatId: `society-${newSociety._id}`
+        };
+        
+        await axios.post(`http://localhost:5000/api/chat/messages`, welcomeMessage);
+        
+        // Add announcement about new society
+        const announcementMessage = {
+          sender: 'admin',
+          content: `Welcome to our newest society: ${newSociety.name}!`,
+          isAdmin: true,
+          chatId: 'announcements'
+        };
+        
+        await axios.post(`http://localhost:5000/api/chat/messages`, announcementMessage);
+      } catch (error) {
+        console.error('Error creating chat for new society:', error);
+        // We don't reject the promise here as the society was still created successfully
+      }
+      
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message || 'Failed to create society');
+    }
   }
-});
+);
+
+// Helper function to generate an avatar emoji for the society
+function getAvatarForSociety(societyName) {
+  const societyType = societyName.toLowerCase();
+  
+  if (societyType.includes('computer') || societyType.includes('tech') || societyType.includes('programming')) {
+    return '💻';
+  } else if (societyType.includes('drama') || societyType.includes('theatre') || societyType.includes('acting')) {
+    return '🎭';
+  } else if (societyType.includes('music') || societyType.includes('band') || societyType.includes('choir')) {
+    return '🎵';
+  } else if (societyType.includes('science') || societyType.includes('physics')) {
+    return '⚛️';
+  } else if (societyType.includes('art') || societyType.includes('paint')) {
+    return '🎨';
+  } else if (societyType.includes('sport') || societyType.includes('athletic')) {
+    return '🏆';
+  } else if (societyType.includes('debate') || societyType.includes('speech')) {
+    return '🎙️';
+  } else if (societyType.includes('book') || societyType.includes('literature') || societyType.includes('reading')) {
+    return '📚';
+  } else if (societyType.includes('math') || societyType.includes('mathematics')) {
+    return '🔢';
+  } else if (societyType.includes('game') || societyType.includes('gaming')) {
+    return '🎮';
+  }
+  
+  // Default emoji
+  return '🏛️';
+}
 
 // Async thunk to fetch societies
 export const fetchSocieties = createAsyncThunk('society/fetchSocieties', async (_, { rejectWithValue }) => {

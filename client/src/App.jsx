@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
+import { initializeChatSystem } from "./services/chatService";
 import "./styles/App.css";
 
 // Layout & Pages
@@ -36,6 +37,7 @@ function App() {
   const [darkMode, setDarkMode] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [chatSystemInitialized, setChatSystemInitialized] = useState(false);
 
   useEffect(() => {
     // Simulate a login for demo purposes
@@ -63,6 +65,22 @@ function App() {
       setDarkMode(true);
       document.body.classList.add("dark-mode");
     }
+
+    // Initialize chat system
+    const setupChatSystem = async () => {
+      try {
+        console.log('Initializing chat system...');
+        const result = await initializeChatSystem();
+        console.log('Chat system initialized:', result);
+        setChatSystemInitialized(true);
+      } catch (error) {
+        console.error('Failed to initialize chat system:', error);
+        // Continue anyway, as it's not critical
+        setChatSystemInitialized(true);
+      }
+    };
+
+    setupChatSystem();
   }, []);
 
   const toggleTheme = () => {

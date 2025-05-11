@@ -1,187 +1,118 @@
 import { useState, useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchChats, setActiveChat, createChat } from '../../features/chat/chatUsersSlice.mjs';
+import { fetchMessages, sendMessage } from '../../features/chat/chatMessagesSlice.mjs';
+import { fetchSocieties } from '../../features/society/societySlice.mjs';
+import axios from 'axios';
 import '../../styles/pages/admin/Chat.css';
 
 const Chat = () => {
-  const [activeChat, setActiveChat] = useState('announcements');
-  const [societies, setSocieties] = useState([]);
-  const [messages, setMessages] = useState({});
-  const [newMessage, setNewMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-  const [unreadCounts, setUnreadCounts] = useState({});
+  const dispatch = useDispatch();
+  const { chats = [], activeChat = 'announcements', unreadCounts = {}, status: chatsStatus = 'idle' } = useSelector((state) => state.chatUsers || {});
+  const { messages = {}, status: messagesStatus = 'idle' } = useSelector((state) => state.chatMessages || {});
+  const { societies = [] } = useSelector((state) => state.society || {});
   
+  const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef(null);
+  const [lastSocietyUpdate, setLastSocietyUpdate] = useState(0);
+  const [isInitializing, setIsInitializing] = useState(true);
 
+  // Fetch all societies from the database
   useEffect(() => {
-    const fetchChatData = async () => {
+    dispatch(fetchSocieties())
+      .unwrap()
+      .then((fetchedSocieties) => {
+        console.log('Societies fetched:', fetchedSocieties);
+        setLastSocietyUpdate(Date.now());
+      })
+      .catch(error => console.error('Failed to fetch societies:', error));
+  }, [dispatch]);
+
+  // Fetch existing chats
+  useEffect(() => {
+    dispatch(fetchChats())
+      .unwrap()
+      .then((fetchedChats) => {
+        console.log('Chats fetched:', fetchedChats);
+        ensureAllSocietiesHaveChats();
+      })
+      .catch(error => console.error('Failed to fetch chats:', error));
+  }, [dispatch, lastSocietyUpdate]);
+
+  // Function to create chats for societies that don't have them
+  const ensureAllSocietiesHaveChats = async () => {
+    try {
+      if (!Array.isArray(societies) || societies.length === 0) {
+        console.log('No societies available yet');
+        setIsInitializing(false);
+        return;
+      }
+      
+      console.log('Checking if all societies have chats...');
+      
       try {
-        // Simulate API call
-        
-        // Mock data - societies
-        const mockSocieties = [
-          { id: 1, name: 'Computer Science Society', avatar: '💻' },
-          { id: 2, name: 'Drama Club', avatar: '🎭' },
-          { id: 3, name: 'Physics Society', avatar: '⚛️' },
-          { id: 4, name: 'Debate Club', avatar: '🎙️' },
-          { id: 5, name: 'Art Society', avatar: '🎨' }
-        ];
-        
-        // Mock data - messages
-        const mockMessages = {
-          announcements: [
-            {
-              id: 1,
-              sender: 'admin',
-              content: 'Welcome to the new academic year! All societies should submit their annual plans by the end of next week.',
-              timestamp: '2023-07-01T10:30:00.000Z',
-              isAdmin: true
-            },
-            {
-              id: 2,
-              sender: 'Computer Science Society',
-              content: 'Thank you for the reminder. Our plan will be submitted by Wednesday.',
-              timestamp: '2023-07-01T11:05:00.000Z',
-              isAdmin: false
-            },
-            {
-              id: 3,
-              sender: 'admin',
-              content: 'The university budget for society events this semester has been increased by 15%. Please update your proposals accordingly.',
-              timestamp: '2023-07-03T09:15:00.000Z',
-              isAdmin: true
-            },
-            {
-              id: 4,
-              sender: 'Drama Club',
-              content: 'That\'s great news! We\'ll revise our production budget.',
-              timestamp: '2023-07-03T09:30:00.000Z',
-              isAdmin: false
-            }
-          ]
-        };
-        
-        // Initialize chat entries for all societies
-        mockSocieties.forEach(society => {
-          const chatId = `society-${society.id}`;
-          if (!mockMessages[chatId]) {
-            mockMessages[chatId] = [];
-          }
+        // Call our API endpoint to ensure all society chats exist
+        const response = await axios.post('http://localhost:5000/api/ensure-society-chats', {
+          societies: societies.map(society => ({
+            _id: society._id,
+            name: society.name
+          }))
         });
         
-        // Add mock messages for Computer Science Society
-        mockMessages['society-1'] = [
-          {
-            id: 1,
-            sender: 'admin',
-            content: 'Hello Computer Science Society, how can I help you today?',
-            timestamp: '2023-07-01T09:00:00.000Z',
-            isAdmin: true
-          },
-          {
-            id: 2,
-            sender: 'Computer Science Society',
-            content: 'We were wondering about the process for booking the main auditorium for our upcoming event.',
-            timestamp: '2023-07-01T09:15:00.000Z',
-            isAdmin: false
-          },
-          {
-            id: 3,
-            sender: 'admin',
-            content: 'You\'ll need to submit a venue request through the Calendar page. Please include the date, time, and expected attendee count.',
-            timestamp: '2023-07-01T09:20:00.000Z',
-            isAdmin: true
-          },
-          {
-            id: 4,
-            sender: 'Computer Science Society',
-            content: 'Perfect, thanks for the information. We\'ll submit that request this week.',
-            timestamp: '2023-07-01T09:25:00.000Z',
-            isAdmin: false
-          },
-          {
-            id: 5,
-            sender: 'admin',
-            content: 'Great! Let me know if you need anything else.',
-            timestamp: '2023-07-01T09:28:00.000Z',
-            isAdmin: true
-          }
-        ];
+        console.log('Society chats ensured:', response.data);
         
-        // Add mock messages for Drama Club
-        mockMessages['society-2'] = [
-          {
-            id: 1,
-            sender: 'admin',
-            content: 'Hi Drama Club, what can I assist you with?',
-            timestamp: '2023-07-02T10:00:00.000Z',
-            isAdmin: true
-          },
-          {
-            id: 2,
-            sender: 'Drama Club',
-            content: 'We need information about the budget allocation for our upcoming production.',
-            timestamp: '2023-07-02T10:15:00.000Z',
-            isAdmin: false
-          },
-          {
-            id: 3,
-            sender: 'admin',
-            content: 'Your society has been allocated $1,500 for this semester. Would you like me to send over the detailed breakdown?',
-            timestamp: '2023-07-02T10:20:00.000Z',
-            isAdmin: true
-          },
-          {
-            id: 4,
-            sender: 'Drama Club',
-            content: 'Yes, that would be very helpful. Could you also include information about additional funding sources?',
-            timestamp: '2023-07-02T10:25:00.000Z',
-            isAdmin: false
-          }
-        ];
-
-        // Add mock messages for Physics Society
-        mockMessages['society-3'] = [
-          {
-            id: 1,
-            sender: 'Physics Society',
-            content: 'Hello Admin, we\'d like to organize a stargazing event next month.',
-            timestamp: '2023-07-04T14:10:00.000Z',
-            isAdmin: false
-          },
-          {
-            id: 2,
-            sender: 'admin',
-            content: 'That sounds like a great idea! Do you have a specific date and location in mind?',
-            timestamp: '2023-07-04T14:15:00.000Z',
-            isAdmin: true
-          },
-          {
-            id: 3,
-            sender: 'Physics Society',
-            content: 'We\'re thinking about the university observatory on the 15th next month.',
-            timestamp: '2023-07-04T14:20:00.000Z',
-            isAdmin: false
-          }
-        ];
+        // Refresh the chats list
+        dispatch(fetchChats());
         
-        // Mock unread counts
-        const mockUnreadCounts = {
-          'society-2': 2,
-          'society-4': 1
-        };
-        
-        setSocieties(mockSocieties);
-        setMessages(mockMessages);
-        setUnreadCounts(mockUnreadCounts);
-        setIsLoading(false);
       } catch (error) {
-        console.error('Error fetching chat data:', error);
-        setIsLoading(false);
+        console.error('Error ensuring society chats:', error);
+      } finally {
+        setIsInitializing(false);
       }
-    };
+    } catch (error) {
+      console.error('Error in ensureAllSocietiesHaveChats:', error);
+      setIsInitializing(false);
+    }
+  };
 
-    fetchChatData();
-  }, []);
+  // Helper function to generate avatar for society based on name
+  function getAvatarForSociety(societyName) {
+    const societyType = societyName.toLowerCase();
+    
+    if (societyType.includes('computer') || societyType.includes('tech') || societyType.includes('programming')) {
+      return '💻';
+    } else if (societyType.includes('drama') || societyType.includes('theatre') || societyType.includes('acting')) {
+      return '🎭';
+    } else if (societyType.includes('music') || societyType.includes('band') || societyType.includes('choir')) {
+      return '🎵';
+    } else if (societyType.includes('science') || societyType.includes('physics')) {
+      return '⚛️';
+    } else if (societyType.includes('art') || societyType.includes('paint')) {
+      return '🎨';
+    } else if (societyType.includes('sport') || societyType.includes('athletic')) {
+      return '🏆';
+    } else if (societyType.includes('debate') || societyType.includes('speech')) {
+      return '🎙️';
+    } else if (societyType.includes('book') || societyType.includes('literature') || societyType.includes('reading')) {
+      return '📚';
+    } else if (societyType.includes('math') || societyType.includes('mathematics')) {
+      return '🔢';
+    } else if (societyType.includes('game') || societyType.includes('gaming')) {
+      return '🎮';
+    }
+    
+    // Default emoji
+    return '🏛️';
+  }
 
+  // Fetch messages for active chat whenever it changes
+  useEffect(() => {
+    if (activeChat) {
+      dispatch(fetchMessages(activeChat));
+    }
+  }, [dispatch, activeChat]);
+
+  // Scroll to bottom when messages change
   useEffect(() => {
     scrollToBottom();
   }, [messages, activeChat]);
@@ -190,31 +121,29 @@ const Chat = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  // Handle sending messages with better error handling
   const handleSend = () => {
     if (!newMessage.trim()) return;
     
-    const currentMessages = messages[activeChat] || [];
+    const messageData = {
+      sender: 'admin',
+      content: newMessage,
+      isAdmin: true,
+      chatId: activeChat
+    };
     
-    // Add the new message
-    const updatedMessages = [
-      ...currentMessages,
-      {
-        id: currentMessages.length + 1,
-        sender: 'admin',
-        content: newMessage,
-        timestamp: new Date().toISOString(),
-        isAdmin: true
-      }
-    ];
+    console.log('Sending message:', messageData);
     
-    // Update messages
-    setMessages({
-      ...messages,
-      [activeChat]: updatedMessages
-    });
-    
-    // Clear input
-    setNewMessage('');
+    dispatch(sendMessage(messageData))
+      .unwrap()
+      .then(response => {
+        console.log('Message sent successfully:', response);
+        setNewMessage('');
+      })
+      .catch(error => {
+        console.error('Error sending message:', error);
+        alert('Failed to send message. Please try again.');
+      });
   };
 
   const handleKeyPress = (e) => {
@@ -225,59 +154,88 @@ const Chat = () => {
   };
 
   const formatTime = (timestamp) => {
-    const date = new Date(timestamp);
-    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  };
-
-  const handleChatSelect = (chatId) => {
-    setActiveChat(chatId);
-    
-    // Clear unread count for this chat
-    if (unreadCounts[chatId]) {
-      setUnreadCounts(prev => ({
-        ...prev,
-        [chatId]: 0
-      }));
+    if (!timestamp) return '';
+    try {
+      const date = new Date(timestamp);
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } catch (e) {
+      console.error("Error formatting timestamp:", e);
+      return '';
     }
   };
 
-  // Helper to get the society name from the active chat
+  const handleChatSelect = (chatId) => {
+    dispatch(setActiveChat(chatId));
+  };
+
   const getActiveSocietyName = () => {
     if (activeChat === 'announcements') {
       return 'Announcements';
     }
     
-    const societyId = parseInt(activeChat.split('-')[1]);
-    const society = societies.find(s => s.id === societyId);
-    return society ? society.name : '';
+    const society = Array.isArray(chats) ? chats.find(chat => chat?.chatId === activeChat) : null;
+    return society ? society.chatName : '';
   };
 
-  // Helper to get the society avatar from the active chat
   const getActiveSocietyAvatar = () => {
     if (activeChat === 'announcements') {
       return '📢';
     }
     
-    const societyId = parseInt(activeChat.split('-')[1]);
-    const society = societies.find(s => s.id === societyId);
-    return society ? society.avatar : '';
+    const society = Array.isArray(chats) ? chats.find(chat => chat?.chatId === activeChat) : null;
+    return society ? society.avatar : '💬';
   };
 
-  if (isLoading) {
-    return <div className="loading">Loading chat data...</div>;
-  }
+  const getMessagePreview = (messageList) => {
+    if (!messageList || messageList.length === 0) {
+      return 'No messages yet';
+    }
+    
+    const latestMessage = messageList[messageList.length - 1];
+    if (!latestMessage || !latestMessage.content) {
+      return 'No message content';
+    }
+    
+    try {
+      return typeof latestMessage.content === 'string' 
+        ? latestMessage.content.substring(0, 30) + '...'
+        : 'Invalid message content';
+    } catch (error) {
+      console.error('Error getting message preview:', error);
+      return 'Error displaying message';
+    }
+  };
+
+  const getUniqueMessageKey = (message) => {
+    // Ensure we have a truly unique key for each message
+    if (message._id) return message._id;
+    if (message.chatId && message.messageId) return `${message.chatId}-${message.messageId}`;
+    return Math.random().toString(36).substr(2, 9); // Fallback to random string
+  };
+
+  const isLoading = chatsStatus === 'loading' || messagesStatus === 'loading';
+
+  const currentMessages = Array.isArray(messages[activeChat]) ? messages[activeChat] : [];
+
+  const societyChats = Array.isArray(chats) ? 
+    chats.filter(chat => chat && chat.chatType === 'society') : 
+    [];
 
   return (
     <div className="chat-page">
+      {isInitializing ? (
+        <div className="initializing-overlay">
+          <div className="loading">Setting up chat system...</div>
+        </div>
+      ) : null}
+      
       <div className="chat-container">
-        {/* Chat sidebar */}
         <div className="chat-sidebar">
           <div className="chat-sidebar-header">
             <h3>Chats</h3>
           </div>
           
           <div className="chat-list">
-            {/* Global announcements chat */}
             <div 
               className={`chat-list-item ${activeChat === 'announcements' ? 'active' : ''}`}
               onClick={() => handleChatSelect('announcements')}
@@ -286,9 +244,7 @@ const Chat = () => {
               <div className="chat-item-info">
                 <div className="chat-item-name">Announcements</div>
                 <div className="chat-item-preview">
-                  {messages.announcements && messages.announcements.length > 0 ? 
-                    messages.announcements[messages.announcements.length - 1].content.substring(0, 30) + '...' : 
-                    'No messages yet'}
+                  {getMessagePreview(messages['announcements'])}
                 </div>
               </div>
               {unreadCounts['announcements'] > 0 && (
@@ -297,36 +253,37 @@ const Chat = () => {
             </div>
             
             <div className="chat-list-separator">
-              <span>Societies</span>
+              <span>Societies ({societyChats.length})</span>
             </div>
             
-            {/* Individual society chats */}
-            {societies.map(society => (
-              <div 
-                key={society.id}
-                className={`chat-list-item ${activeChat === `society-${society.id}` ? 'active' : ''}`}
-                onClick={() => handleChatSelect(`society-${society.id}`)}
-              >
-                <div className="chat-item-avatar">{society.avatar}</div>
-                <div className="chat-item-info">
-                  <div className="chat-item-name">{society.name}</div>
-                  <div className="chat-item-preview">
-                    {messages[`society-${society.id}`] && messages[`society-${society.id}`].length > 0 ? 
-                      messages[`society-${society.id}`][messages[`society-${society.id}`].length - 1].content.substring(0, 30) + '...' : 
-                      'No messages yet'}
+            {societyChats.length > 0 ? (
+              societyChats.map(society => society && (
+                <div 
+                  key={society.chatId || 'unknown'}
+                  className={`chat-list-item ${activeChat === society.chatId ? 'active' : ''}`}
+                  onClick={() => handleChatSelect(society.chatId)}
+                >
+                  <div className="chat-item-avatar">{society.avatar || '💬'}</div>
+                  <div className="chat-item-info">
+                    <div className="chat-item-name">{society.chatName || 'Unknown Society'}</div>
+                    <div className="chat-item-preview">
+                      {getMessagePreview(messages[society.chatId])}
+                    </div>
                   </div>
+                  {unreadCounts[society.chatId] > 0 && (
+                    <div className="unread-badge">{unreadCounts[society.chatId]}</div>
+                  )}
                 </div>
-                {unreadCounts[`society-${society.id}`] > 0 && (
-                  <div className="unread-badge">{unreadCounts[`society-${society.id}`]}</div>
-                )}
+              ))
+            ) : (
+              <div className="no-societies-message">
+                No societies available. Add societies from the Add Society page.
               </div>
-            ))}
+            )}
           </div>
         </div>
         
-        {/* Main chat area */}
         <div className="chat-main">
-          {/* Chat header */}
           <div className="chat-header">
             <div className="chat-avatar">{getActiveSocietyAvatar()}</div>
             <div className="chat-info">
@@ -335,20 +292,21 @@ const Chat = () => {
             </div>
           </div>
           
-          {/* Messages container - fixed size */}
           <div className="messages-container">
-            {messages[activeChat] && messages[activeChat].length > 0 ? (
+            {messagesStatus === 'loading' ? (
+              <div className="loading">Loading messages...</div>
+            ) : currentMessages.length > 0 ? (
               <div className="messages-list">
-                {messages[activeChat].map(message => (
+                {currentMessages.map(message => message && (
                   <div 
-                    key={message.id}
+                    key={getUniqueMessageKey(message)}
                     className={`message ${message.isAdmin ? 'admin-message' : 'society-message'}`}
                   >
                     <div className="message-content">
                       {!message.isAdmin && (
-                        <div className="message-sender">{message.sender}</div>
+                        <div className="message-sender">{message.sender || 'Unknown'}</div>
                       )}
-                      <div className="message-text">{message.content}</div>
+                      <div className="message-text">{message.content || 'No content'}</div>
                       <div className="message-time">{formatTime(message.timestamp)}</div>
                     </div>
                   </div>
@@ -364,7 +322,6 @@ const Chat = () => {
             )}
           </div>
           
-          {/* Message input */}
           <div className="chat-input-container">
             <textarea
               value={newMessage}
@@ -380,7 +337,7 @@ const Chat = () => {
             <button 
               className={`send-button ${newMessage.trim() ? 'active' : ''}`}
               onClick={handleSend}
-              disabled={!newMessage.trim()}
+              disabled={!newMessage.trim() || messagesStatus === 'sending'}
             >
               <span className="send-icon">📨</span>
             </button>

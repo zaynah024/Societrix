@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { createSociety, resetStatus } from '../../features/society/societySlice';
+import { fetchChats } from '../../features/chat/chatUsersSlice.mjs';
+import { useNavigate } from 'react-router-dom';
 import '../../styles/pages/admin/AddSociety.css';
 
 const AddSociety = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { isLoading, error, success } = useSelector((state) => state.society);
 
   const [formData, setFormData] = useState({
@@ -16,6 +19,9 @@ const AddSociety = () => {
     ratinngs: 5.0,
   });
 
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -24,18 +30,44 @@ const AddSociety = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createSociety(JSON.stringify(formData)));
+
+    dispatch(createSociety(formData))
+      .unwrap()
+      .then((response) => {
+        setSuccessMessage(
+          'Society created successfully! A chat has been set up for communication.'
+        );
+        resetForm();
+
+        // Refresh the chat list to include the new society
+        dispatch(fetchChats());
+
+        if (
+          window.confirm(
+            'Society created successfully with chat setup. Would you like to go to the chat page?'
+          )
+        ) {
+          navigate('/chat');
+        }
+      })
+      .catch((error) => {
+        setErrorMessage(error || 'Failed to create society. Please try again.');
+      });
   };
 
-  const handleReset = () => {
+  const resetForm = () => {
     setFormData({
       name: '',
       email: '',
       description: '',
     });
     dispatch(resetStatus());
+  };
+
+  const handleReset = () => {
+    resetForm();
   };
 
   return (
@@ -53,6 +85,12 @@ const AddSociety = () => {
         )}
 
         {error && <div className="error-message">{error}</div>}
+
+        {successMessage && (
+          <div className="success-message">{successMessage}</div>
+        )}
+
+        {errorMessage && <div className="error-message">{errorMessage}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">

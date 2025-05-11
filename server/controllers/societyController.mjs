@@ -3,6 +3,221 @@ import bcrypt from 'bcrypt';
 import Society from "../models/Society.mjs";
 import Report from '../models/Reports.mjs';
 import Event from '../models/Events.mjs'; // Add this import
+import ChatUser from '../models/ChatUser.mjs';
+import ChatMessage from '../models/ChatMessages.mjs';
+
+// Helper function to generate avatar for society
+const getAvatarForSociety = (societyName) => {
+  const societyType = societyName.toLowerCase();
+  
+  if (societyType.includes('computer') || societyType.includes('tech') || societyType.includes('programming')) {
+    return '💻';
+  } else if (societyType.includes('drama') || societyType.includes('theatre') || societyType.includes('acting')) {
+    return '🎭';
+  } else if (societyType.includes('music') || societyType.includes('band') || societyType.includes('choir')) {
+    return '🎵';
+  } else if (societyType.includes('science') || societyType.includes('physics')) {
+    return '⚛️';
+  } else if (societyType.includes('art') || societyType.includes('paint')) {
+    return '🎨';
+  } else if (societyType.includes('sport') || societyType.includes('athletic')) {
+    return '🏆';
+  } else if (societyType.includes('debate') || societyType.includes('speech')) {
+    return '🎙️';
+  } else if (societyType.includes('book') || societyType.includes('literature') || societyType.includes('reading')) {
+    return '📚';
+  } else if (societyType.includes('math') || societyType.includes('mathematics')) {
+    return '🔢';
+  } else if (societyType.includes('game') || societyType.includes('gaming')) {
+    return '🎮';
+  }
+  
+  // Default emoji
+  return '🏛️';
+};
+
+// Create a society and its corresponding chat
+export const createSociety = async (req, res) => {
+  try {
+    console.log('Creating society with data:', req.body);
+    
+    // Create the society
+    const society = new Society(req.body);
+    const savedSociety = await society.save();
+    
+    console.log('Society created successfully:', savedSociety);
+    
+    // Create a chat for this society
+    const chatId = `society-${savedSociety._id}`;
+    
+    try {
+      const chat = await ChatUser.create({
+        chatId,
+        chatName: savedSociety.name,
+        chatType: 'society',
+        avatar: getAvatarForSociety(savedSociety.name),
+        members: [
+          { userId: 'admin', role: 'admin' },
+          { userId: chatId, role: 'society' }
+        ]
+      });
+      
+      console.log('Chat created for society:', chat);
+      
+      // Add welcome message to the new chat
+      const welcomeMessage = await ChatMessage.create({
+        messageId: 1,
+        sender: 'admin',
+        content: `Welcome ${savedSociety.name}! This is your private chat with the admin.`,
+        timestamp: new Date(),
+        isAdmin: true,
+        chatId
+      });
+      
+      console.log('Welcome message created:', welcomeMessage);
+      
+      // Add announcement about the new society
+      const announcements = await ChatUser.findOne({ chatId: 'announcements' });
+      if (!announcements) {
+        // Create announcements chat if it doesn't exist
+        await ChatUser.create({
+          chatId: 'announcements',
+          chatName: 'Announcements',
+          chatType: 'announcements',
+          avatar: '📢',
+          members: [{ userId: 'admin', role: 'admin' }]
+        });
+      }
+      
+      // Get the latest announcement message to determine the next ID
+      const latestAnnouncementMsg = await ChatMessage.findOne({ chatId: 'announcements' }).sort({ messageId: -1 });
+      const nextMsgId = latestAnnouncementMsg ? latestAnnouncementMsg.messageId + 1 : 1;
+      
+      // Create the announcement message
+      const announcementMessage = await ChatMessage.create({
+        messageId: nextMsgId,
+        sender: 'admin',
+        content: `Welcome to our newest society: ${savedSociety.name}!`,
+        timestamp: new Date(),
+        isAdmin: true,
+        chatId: 'announcements'
+      });
+      
+      console.log('Announcement message created:', announcementMessage);
+      
+    } catch (chatError) {
+      console.error('Error creating chat for society:', chatError);
+    }
+    
+    res.status(201).json(savedSociety);
+  } catch (error) {
+    console.error('Error creating society:', error);
+    res.status(500).json({ message: 'Error creating society', error: error.message });
+  }
+};
+
+// Add a new endpoint to ensure chats for societies
+export const ensureSocietyChats = async (req, res) => {
+  try {
+    let societies = [];
+    
+    if (req.body && req.body.societies && Array.isArray(req.body.societies)) {
+      societies = req.body.societies;
+    } else {
+      const allSocieties = await Society.find();
+      societies = allSocieties.map(society => ({
+        _id: society._id,
+        name: society.name
+      }));
+    }
+    
+    console.log(`Ensuring chats for ${societies.length} societies`);
+    
+    // First ensure announcements chat
+    let announcementsChat = await ChatUser.findOne({ chatId: 'announcements' });
+    if (!announcementsChat) {
+      announcementsChat = await ChatUser.create({
+        chatId: 'announcements',
+        chatName: 'Announcements',
+        chatType: 'announcements',
+        avatar: '📢',
+        members: [{ userId: 'admin', role: 'admin' }]
+      });
+      
+      await ChatMessage.create({
+        messageId: 1,
+        sender: 'admin',
+        content: 'Welcome to the announcements channel!',
+        timestamp: new Date(),
+        isAdmin: true,
+        chatId: 'announcements'
+      });
+      
+      console.log('Created announcements chat:', announcementsChat);
+    }
+    
+    // Create chats for each society
+    const results = [];
+    for (const society of societies) {
+      const chatId = `society-${society._id}`;
+      const existingChat = await ChatUser.findOne({ chatId });
+      
+      if (!existingChat) {
+        try {
+          // Create the chat
+          const chat = await ChatUser.create({
+            chatId,
+            chatName: society.name,
+            chatType: 'society',
+            avatar: getAvatarForSociety(society.name),
+            members: [
+              { userId: 'admin', role: 'admin' },
+              { userId: chatId, role: 'society' }
+            ]
+          });
+          
+          // Add welcome message
+          await ChatMessage.create({
+            messageId: 1,
+            sender: 'admin',
+            content: `Welcome ${society.name}! This is your private chat with the admin.`,
+            timestamp: new Date(),
+            isAdmin: true,
+            chatId
+          });
+          
+          results.push({
+            society: society.name,
+            status: 'created',
+            chat
+          });
+        } catch (error) {
+          console.error(`Error creating chat for society ${society.name}:`, error);
+          results.push({
+            society: society.name,
+            status: 'error',
+            error: error.message
+          });
+        }
+      } else {
+        results.push({
+          society: society.name,
+          status: 'exists',
+          chat: existingChat
+        });
+      }
+    }
+    
+    res.status(200).json({
+      success: true,
+      societiesProcessed: societies.length,
+      results
+    });
+  } catch (error) {
+    console.error('Error ensuring society chats:', error);
+    res.status(500).json({ message: 'Error ensuring society chats', error: error.message });
+  }
+};
 
 export const addSociety = async (req, res, next) => {
   try {

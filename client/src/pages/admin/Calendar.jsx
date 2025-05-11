@@ -337,7 +337,7 @@ const Calendar = () => {
               <div className="event-info-grid">
                 <div className="info-item">
                   <span className="info-label">Status:</span>
-                  <span className={`info-value status-${selectedEvent.status}`}>{selectedEvent.status}</span>
+                  <span className={`info-value status-${selectedEvent.status}`}>{selectedEvent.status.toUpperCase()}</span>
                 </div>
                 <div className="info-item">
                   <span className="info-label">Date:</span>
@@ -357,7 +357,7 @@ const Calendar = () => {
                 </div>
                 <div className="info-item">
                   <span className="info-label">Budget:</span>
-                  <span className="info-value">${selectedEvent.budget}</span>
+                  <span className="info-value">PKR {selectedEvent.budget}</span>
                 </div>
                 <div className="info-item full-width">
                   <span className="info-label">Description:</span>

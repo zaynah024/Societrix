@@ -1,0 +1,125 @@
+/* .header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 60px;
+  padding: 0 16px;
+  background-color: var(--card-bg);
+  border-bottom: 1px solid var(--border-color);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+.header-menu-button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  transition: color 0.2s;
+  z-index: 40;
+}
+
+.header-menu-button:hover {
+  color: var(--accent-color);
+}
+
+.header-menu-button:active {
+  transform: scale(0.95);
+}
+
+.app-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-left: 8px;
+  flex: 1;
+}
+
+.brand-name {
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--accent-color);
+  line-height: 1.2;
+}
+
+.brand-tagline {
+  font-size: 12px;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.theme-button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 50%;
+  transition: background-color 0.2s;
+}
+
+.theme-button:hover {
+  background-color: var(--sidebar-active);
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.notification-button {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.notification-button:hover {
+  color: var(--accent-color);
+}
+
+.notification-button:active {
+  transform: scale(0.95);
+}
+
+.notification-indicator {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 8px;
+  height: 8px;
+  background-color: #ef4444;
+  border-radius: 50%;
+}
+
+.chat-button {
+  position: relative;
+}
+
+@media (max-width: 767px) {
+  .mobile-brand {
+    display: block;
+  }
+  
+  .header-menu-button {
+    font-size: 20px;
+    padding: 8px 10px;
+  }
+} */

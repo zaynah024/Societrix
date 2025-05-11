@@ -1,0 +1,15 @@
+{
+  "scripts": {
+    "start": "node server/index.mjs",
+    "setup-chat-data": "node server/scripts/setupDummyData.mjs"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^5.13.8",
+    "cors": "^2.8.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.12"
+  }
+}
