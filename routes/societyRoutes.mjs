@@ -1,13 +1,13 @@
-import { addSociety, getSocieties, deleteSociety, editDescription, loginSociety, resetPassword } from '../controllers/societyController.mjs';
-import express from 'express'; // Import express
+import express from 'express';
+import { addSociety, getSocieties, deleteSociety, editDescription, updateSocietyRating } from '../controllers/societyController.mjs';
 
 const router = express.Router();
 
 router.post('/add-society', addSociety);
-router.get('/societies', getSocieties);
+router.get('/societies', getSocieties); 
 router.delete('/societies/:id', deleteSociety);
 router.patch('/societies/:id', editDescription);
-router.post('/login', loginSociety); // Login route
-router.post('/reset-password', resetPassword); // Password reset route
+router.put('/societies/:id/rating', updateSocietyRating);
 
 export default router;
+

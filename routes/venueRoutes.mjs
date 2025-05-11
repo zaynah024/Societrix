@@ -1,6 +1,6 @@
 import express from 'express';
 import { getVenues, getMyBookings } from '../controllers/venueController.mjs';
-import { authenticateUser } from '../middleware/authMiddleware.mjs'; 
+import { authenticateUser } from '../middleware/authMiddleware.mjs';
 const router = express.Router();
 
 router.get('/', getVenues);
