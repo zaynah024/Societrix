@@ -1,0 +1,38 @@
+.app-layout {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  transition: all 0.3s ease;
+  padding-left: 26px;
+}
+
+.app-layout.sidebar-open {
+  margin-left: 0; /* Mobile default */
+}
+
+.app-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+  width: 100%;
+  margin-left: 0;
+}
+
+@media (min-width: 768px) {
+  /* On desktop, when sidebar is open, we shift content to make room for sidebar */
+  .app-layout.sidebar-open .app-content {
+    margin-left: 240px;
+    width: calc(100% - 240px);
+  }
+}
+
+.main-content {
+  flex: 1;
+  padding: -10%;
+  overflow-y: auto;
+  background-color: var(--background-color);
+}
