@@ -3,12 +3,12 @@ import mongoose from 'mongoose';
 const BookingSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User', // Reference to the User model
+    ref: 'User', 
     required: true,
   },
   eventId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Event', // Reference to the Event model
+    ref: 'Event',
     required: true,
   },
   date: {
@@ -33,18 +33,18 @@ const VenueSchema = new mongoose.Schema({
   },
   capacity: {
     type: Number,
-    required: true, // Maximum number of people the venue can accommodate
+    required: true, 
   },
   type: {
     type: String,
-    enum: ['auditorium', 'conference', 'outdoor'], // Types of venues
+    enum: ['auditorium', 'conference', 'outdoor'],
     required: true,
   },
   features: {
-    type: [String], // Additional features (e.g., "Stage", "Video Conferencing")
+    type: [String], 
     default: [],
   },
-  bookings: [BookingSchema], // Embedded bookings
+  bookings: [BookingSchema], 
   createdAt: {
     type: Date,
     default: Date.now,

@@ -6,7 +6,7 @@ const SocietySchema = new mongoose.Schema({
         required: true,
         unique: true,
     },
-    email: {
+    email:{
         type: String,
         required: true,
         unique: true,
@@ -15,40 +15,23 @@ const SocietySchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    password: {
+    password:{
         type: String,
         required: true,
     },
-    members: [
-        {
-            name: {
-                type: String,
-                required: true,
-            },
-            role: {
-                type: String,
-                required: true, 
-            },
-            contact: {
-                type: String,
-            },
-        },
-    ],
-    events: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Event',
-        },
-    ],
+    members: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+    }],
     createdAt: {
         type: Date,
         default: Date.now,
     },
-    ratings: {
-        type: Number, 
-        default: 5.0,
-    },
+    rating: { 
+        type: Number,
+        default: 0.0, 
+    }
 });
 
-const Society = mongoose.models.Society || mongoose.model('Society', SocietySchema);
+const Society = mongoose.model('Society', SocietySchema);
 export default Society;
