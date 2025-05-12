@@ -1,0 +1,253 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--sidebar-width);
+  background-color: var(--primary-color);
+  color: white;
+  transition: transform 0.3s ease, width 0.3s ease;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+.sidebar.closed {
+  width: 80px;
+}
+
+.sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  height: var(--header-height);
+  background-color: #0a1828; 
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sidebar-logo {
+    padding-top: 5px;
+  height: 33px;
+  width: auto;
+}
+
+.sidebar.closed .sidebar-logo {
+  margin-right: 0;
+}
+
+.sidebar-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  white-space: nowrap;
+  color: white;
+  margin: 0;
+  letter-spacing: 0.5px;
+}
+
+.sidebar.closed .sidebar-title {
+  display: none;
+}
+
+.sidebar-toggle {
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none; 
+}
+
+.sidebar-toggle:focus {
+  outline: none; 
+  box-shadow: none; 
+}
+
+.sidebar-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 1rem 0;
+}
+
+/* Custom Scrollbar Styling - Enhanced */
+.sidebar-content::-webkit-scrollbar {
+  width: 6px;
+  height: auto;
+}
+
+.sidebar-content::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.05), transparent);
+  border-radius: 10px;
+  margin: 10px 0;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+  border-radius: 10px;
+  transition: all 0.4s ease;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.2);
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to right, rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0.5));
+  box-shadow: 0 0 10px rgba(var(--accent-rgb, 59, 130, 246), 0.5);
+}
+
+.sidebar-content::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(to right, var(--accent-color), rgba(var(--accent-rgb, 59, 130, 246), 0.7));
+}
+
+.sidebar-content::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Firefox scrollbar styling - Enhanced */
+.sidebar-content {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.3) rgba(0, 0, 0, 0.1);
+}
+
+/* For light theme - Enhanced */
+.light-theme .sidebar-content::-webkit-scrollbar-track {
+  background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.05), transparent);
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.05);
+}
+
+.light-theme .sidebar-content::-webkit-scrollbar-thumb {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.2));
+  border: 1px solid rgba(0, 0, 0, 0.03);
+}
+
+.light-theme .sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.3));
+  box-shadow: 0 0 10px rgba(var(--accent-rgb, 59, 130, 246), 0.4);
+}
+
+.light-theme .sidebar-content::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(to right, var(--accent-color), rgba(var(--accent-rgb, 59, 130, 246), 0.7));
+}
+
+.light-theme .sidebar-content {
+  scrollbar-color: rgba(0, 0, 0, 0.2) rgba(0, 0, 0, 0.05);
+}
+
+/* Scrollbar fade effect */
+.sidebar-content::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 100%;
+  pointer-events: none;
+  background: linear-gradient(to left, var(--primary-color) 0%, rgba(0, 0, 0, 0) 100%);
+  opacity: 0.7;
+}
+
+.main-menu h3, 
+.top-societies h3 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  opacity: 0.7;
+  letter-spacing: 1px;
+}
+
+.nav-links {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem 0;
+}
+
+.nav-links li {
+  margin-bottom: 0.25rem;
+}
+
+.nav-links a {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.nav-links a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-links a.active {
+  background-color: var(--secondary-color);
+  border-left: 4px solid var(--accent-color);
+}
+
+.icon {
+  margin-right: 1rem;
+  font-size: 1.1rem;
+  width: 20px;
+  text-align: center;
+}
+
+.sidebar.closed .link-text {
+  display: none;
+}
+
+.top-societies {
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 1rem;
+}
+
+.top-societies ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.top-societies li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.society-name {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 70%;
+}
+
+.society-rating {
+  color: gold;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  
+  .sidebar.open {
+    transform: translateX(0);
+  }
+  
+  .sidebar.closed {
+    transform: translateX(-100%);
+  }
+}

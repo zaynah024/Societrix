@@ -1,0 +1,325 @@
+.dashboard {
+  width: 100%;
+}
+
+.dashboard-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 300px;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.welcome-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+@keyframes welcomeGradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.welcome-section h2 {
+  font-family: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-size: 2.25rem;
+  font-weight: 600;
+  margin: 0;
+  position: relative;
+  padding: 0.25rem 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  text-align: center;
+  
+  /* Gradient animation */
+  background: linear-gradient(
+    90deg,
+    var(--text-color) 0%,
+    var(--accent-color) 35%,
+    var(--text-color) 65%,
+    var(--accent-color) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  animation: welcomeGradient 5s ease infinite;
+  
+  /* Add subtle depth */
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+}
+
+/* Elegant underline effect */
+.welcome-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent-color) 50%,
+    transparent 100%
+  );
+  opacity: 0.6;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .welcome-section h2 {
+    font-size: 1.75rem;
+    background-size: 300% auto;
+  }
+  
+  .welcome-section h2::after {
+    width: 80%;
+    height: 1px;
+  }
+}
+
+.dashboard-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.stat-icon {
+  font-size: 2rem;
+  background-color: rgba(59, 130, 246, 0.1);
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  margin-right: 1rem;
+}
+
+.total-societies .stat-icon {
+  background-color: rgba(99, 102, 241, 0.1);
+  color: #6366f1;
+}
+
+.upcoming-events .stat-icon {
+  background-color: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.available-venues .stat-icon {
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.stat-content {
+  flex: 1;
+}
+
+.stat-content h3 {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.stat-value {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.view-details {
+  font-size: 0.9rem;
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.dashboard-tables {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.section-header h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.view-all, .manage-all {
+  font-size: 0.9rem;
+  color: var(--accent-color);
+  text-decoration: none;
+}
+
+.recent-events-section {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
+  height: 100%;
+}
+
+.recent-events-section .section-header {
+  margin-bottom: 1.25rem;
+}
+
+.active-societies-section {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
+}
+
+.table-responsive {
+  overflow-x: auto;
+  padding: 0;
+  margin: 0;
+  height: 100%;
+}
+
+.events-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  margin-bottom: 1rem;
+}
+
+.events-table th {
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  padding: 1rem 1.5rem;
+  border-bottom: 2px solid var(--border-color);
+  color: var(--text-color);
+  font-weight: bold;
+  font-size: 1.1rem;
+  background-color: rgba(0, 0, 0, 0.02);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.events-table td {
+   text-align: center;
+  padding: 1.2rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+  vertical-align: middle;
+  font-size: 1rem;
+}
+
+.events-table tbody tr:hover {
+  background-color: rgba(59, 130, 246, 0.05);
+}
+
+.events-table th:first-child,
+.events-table td:first-child {
+  width: 22%;
+  font-weight: 500;
+}
+
+.events-table th:nth-child(2),
+.events-table td:nth-child(2) {
+  width: 28%;
+}
+
+.events-table th:nth-child(3),
+.events-table td:nth-child(3) {
+  width: 20%;
+}
+
+.events-table th:nth-child(4),
+.events-table td:nth-child(4) {
+  width: 30%;
+}
+
+.societies-list {
+  margin-top: 1rem;
+}
+
+.society-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.society-card {
+  background-color: rgba(0, 0, 0, 0.03);
+  border-radius: 6px;
+  padding: 1rem;
+  transition: background-color 0.2s;
+}
+
+.society-card:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.society-card h4 {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.society-card p {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  margin: 0.25rem 0;
+}
+
+.no-data {
+  text-align: center;
+  padding: 2rem 0;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+@media (max-width: 992px) {
+  .dashboard-tables {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-stats {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,176 @@
+/* 
+.chat-container {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  width: 320px;
+  height: 400px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.chat-header {
+  padding: 12px 16px;
+  background-color: #9370db;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chat-tabs {
+  display: flex;
+  gap: 16px;
+}
+
+.chat-tab {
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.chat-tab.active {
+  opacity: 1;
+  border-bottom: 2px solid #ffffff;
+}
+
+.chat-close-button {
+  background: none;
+  border: none;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.chat-message {
+  margin-bottom: 16px;
+  max-width: 80%;
+}
+
+.admin-message {
+  margin-right: auto;
+}
+
+.user-message {
+  margin-left: auto;
+}
+
+.message-content {
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.admin-message .message-content {
+  background-color: #f3f4f6;
+}
+
+.user-message .message-content {
+  background-color: #e9d8fd;
+  color: #1f2937;
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 12px;
+}
+
+.message-sender {
+  font-weight: 500;
+}
+
+.message-time {
+  color: #6b7280;
+}
+
+.chat-input {
+  display: flex;
+  padding: 8px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.chat-input-field {
+  flex: 1;
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  outline: none;
+}
+
+.chat-input-field:focus {
+  border-color: #9370db;
+}
+
+.chat-send-button {
+  background-color: #9370db;
+  color: #ffffff;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.chat-send-button:hover {
+  background-color: #805ad5;
+}
+
+/* Reusing admin chat styles, but adjusting a few society-specific elements */
+
+/* Society message styling - Inverse of the admin styles */
+.society-chat .admin-message .message-content {
+  background-color: #f3f4f6;
+  color: #111827;
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
+  border-bottom-left-radius: 0;
+}
+
+.society-chat .society-message .message-content {
+  background-color: #3b82f6;
+  color: white;
+  border-top-right-radius: 1rem;
+  border-top-left-radius: 1rem;
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 0;
+}
+
+/* Society header styling */
+.society-chat .chat-header {
+  background-color: var(--primary-color, #6366f1);
+  color: white;
+}
+
+/* Society-specific chat input */
+.society-chat .chat-input {
+  border: 1px solid var(--primary-color, #6366f1);
+}
+
+/* Society-specific announcement styling */
+.society-announcement-notice {
+  background-color: rgba(99, 102, 241, 0.1);
+  border-left: 3px solid var(--primary-color, #6366f1);
+  padding: 12px;
+  margin: 12px 0;
+  font-size: 14px;
+  border-radius: 4px;
+}

@@ -1,0 +1,539 @@
+:root {
+  --primary-color: #000000;
+  --secondary-color: #16213e;
+  --accent-color: #148CAD;
+  --accent-hover: #0f6d87;
+  --text-color: #333333;
+  --bg-color: #f8f9fa;
+  --sidebar-width: 250px;
+  --header-height: 60px;
+  --card-bg: white;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --border-color: #e0e0e0;
+  --transition-speed: 0.25s;
+}
+
+.dark-mode {
+  --primary-color: #000000;
+  --secondary-color: #16213e;
+  --accent-color: #57c2d5;
+  --accent-hover: #3da8bb;
+  --text-color: #f0f0f0;
+  --bg-color: #121212;
+  --card-bg: #1e1e1e;
+  --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --border-color: #333;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+body {
+  font-family: 'Inter', 'Segoe UI', 'Roboto', sans-serif;
+  color: var(--text-color);
+  background-color: var(--bg-color);
+  transition: background-color var(--transition-speed), color var(--transition-speed);
+}
+
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+/* App Layout */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ---------- Button Styles ---------- */
+button {
+  cursor: pointer;
+  font-family: inherit;
+  transition: all var(--transition-speed) ease;
+}
+
+a {
+  color: var(--accent-color);
+  text-decoration: none;
+  position: relative;
+  padding: 0 2px;
+  transition: color var(--transition-speed) ease, transform var(--transition-speed) ease;
+}
+
+a:hover {
+  color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+/* Animated underline effect */
+a:not(.btn):after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background-color: var(--accent-color);
+  opacity: 0.8;
+  transition: width var(--transition-speed) ease;
+}
+
+a:not(.btn):hover:after {
+  width: 100%;
+}
+
+/* For touchscreens */
+@media (hover: none) {
+  a:active {
+    color: var(--accent-hover);
+  }
+  
+  a:not(.btn):active:after {
+    width: 100%;
+  }
+}
+
+/* For links inside cards or content areas */
+.card a, .content-area a {
+  font-weight: 500;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  box-shadow: var(--card-shadow);
+  padding: 24px;
+  margin-bottom: 24px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+.btn {
+  padding: 0.625rem 1.25rem;
+  border: none;
+  border-radius: 6px;
+  background-color: var(--accent-color);
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn-outline {
+  background-color: transparent;
+  border: 2px solid var(--accent-color);
+  color: var(--accent-color);
+  box-shadow: none;
+}
+
+.btn-outline:hover {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.btn-danger {
+  background-color: #e53e3e;
+  box-shadow: 0 2px 4px rgba(229, 62, 62, 0.2);
+}
+
+.btn-danger:hover {
+  background-color: #c53030;
+  box-shadow: 0 4px 8px rgba(229, 62, 62, 0.3);
+}
+
+.form-group {
+  margin-bottom: 1.25rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.form-control {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: border-color var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(20, 140, 173, 0.15);
+}
+
+/* ...existing code... */
+.form-control:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 3px rgba(20, 140, 173, 0.15);
+}
+
+/* Text elements responsive to theme */
+h1 {
+  color: var(--text-color);
+  transition: color var(--transition-speed);
+}
+
+.text-primary {
+  color: var(--primary-color);
+  transition: color var(--transition-speed);
+}
+
+.text-secondary {
+  color: var(--secondary-color);
+  transition: color var(--transition-speed);
+}
+
+.text-accent {
+  color: var(--accent-color);
+  transition: color var(--transition-speed);
+}
+
+/* Ensure content with default styling also follows the theme */
+.content-area {
+  color: var(--text-color);
+  transition: color var(--transition-speed);
+}
+
+/* For elements that need background-color transitions */
+.bg-theme {
+  background-color: var(--bg-color);
+  transition: background-color var(--transition-speed);
+}
+
+.bg-card {
+  background-color: var(--card-bg);
+  transition: background-color var(--transition-speed);
+}
+
+/* ------------------ LOGIN PAGE STYLES ------------------ */
+.login-page {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(0,30,60,0.3) 0%, rgba(0,0,0,0) 70%);
+  z-index: 1;
+}
+
+
+
+.login-page .login-card {
+  background-color: rgba(0, 0, 0, 0.85);
+  max-width: 420px;
+  width: 90%;
+  border-radius: 12px;
+  padding: 40px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(5px);
+}
+
+.login-page .logo {
+  width: 240px;
+  height: 240px;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+
+.login-page .logo:hover {
+  transform: scale(1.03);
+}
+
+.login-page .welcome {
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 30px;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.login-page .input-group {
+  width: 100%;
+  border: 2px solid #4c4c4c;
+  border-radius: 8px;
+  height: 54px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  padding: 0 15px;
+  background-color: rgba(20, 20, 20, 0.7);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.login-page .input-group:focus-within {
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.login-page .input-group input,
+.login-page .input-group select {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #fff;
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 0;
+}
+
+/* Add this new rule for the dropdown options */
+.login-page .input-group select option {
+  color: #000;
+  background-color: #fff;
+  font-size: 16px;
+  padding: 12px;
+}
+
+.login-page .input-group input::placeholder {
+  color: #888;
+}
+
+.login-page .remember-forgot {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.login-page .remember {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: #bbb;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+
+.login-page .remember:hover {
+  color: #fff;
+}
+
+.login-page .checkbox {
+  background-color: #0091bd;
+  border-radius: 4px;
+  height: 20px;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  transition: all 0.3s ease;
+}
+
+.login-page .remember:hover .checkbox {
+  background-color: #00a8d9;
+  transform: scale(1.05);
+}
+
+.login-page .forgot {
+  color: #bbb;
+  font-size: 14px;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.login-page .forgot:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.login-page .login-button {
+  width: 100%;
+  height: 54px;
+  background-image: linear-gradient(to right, #025BCF, #2F847F);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(2, 91, 207, 0.3);
+}
+
+.login-page .login-button:hover {
+  background-image: linear-gradient(to right, #0252b8, #266f6b);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(2, 91, 207, 0.4);
+}
+
+.login-page .login-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(2, 91, 207, 0.3);
+}
+
+/* ---------------- CREATE NEW PASSWORD STYLES ---------------- */
+.create-new-password {
+  background-color: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  height: 100vh;
+  width: 100vw;
+  position: relative;
+}
+
+.create-new-password::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at center, rgba(0,30,60,0.3) 0%, rgba(0,0,0,0) 70%);
+}
+
+.create-new-password .form-container {
+  background-color: rgba(0, 0, 0, 0.85);
+  padding: 50px;
+  border-radius: 12px;
+  max-width: 520px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.7);
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(5px);
+}
+
+.create-new-password .logo {
+  width: 240px;
+  height: 240px;
+  margin-bottom: 10px;
+  transition: transform 0.3s ease;
+}
+
+.create-new-password .logo:hover {
+  transform: scale(1.03);
+}
+
+.create-new-password .title {
+  color: #fff;
+  font-size: 32px;
+  margin-bottom: 30px;
+  font-weight: bold;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+
+.create-new-password .input-wrapper {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.create-new-password .password-input {
+  width: 100%;
+  padding: 16px 50px 16px 18px;
+  font-size: 16px;
+  background-color: rgba(20, 20, 20, 0.7);
+  border: 2px solid #4c4c4c;
+  border-radius: 8px;
+  color: white;
+  outline: none;
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.create-new-password .password-input:focus {
+  border-color: var(--accent-color);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.create-new-password .toggle-icon {
+  position: absolute;
+  top: 50%;
+  right: 15px;
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+}
+
+.create-new-password .toggle-icon:hover {
+  opacity: 0.8;
+}
+
+.create-new-password .toggle-icon img {
+  width: 20px;
+  height: 16px;
+}
+
+.create-new-password .confirm-button {
+  background-image: linear-gradient(to right, #025BCF, #2F847F);
+  color: white;
+  border: none;
+  padding: 16px 20px;
+  border-radius: 8px;
+  font-size: 18px;
+  font-weight: bold;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(2, 91, 207, 0.3);
+  letter-spacing: 0.5px;
+}
+
+.create-new-password .confirm-button:hover {
+  background-image: linear-gradient(to right, #0252b8, #266f6b);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(2, 91, 207, 0.4);
+}
+
+.create-new-password .confirm-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(2, 91, 207, 0.3);
+}

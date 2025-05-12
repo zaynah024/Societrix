@@ -1,0 +1,842 @@
+.calendar-page {
+  width: 100%;
+  padding: 1rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.page-header h1 {
+  font-size: 1.8rem;
+  margin: 0;
+}
+
+.calendar-controls {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Navigation Controls Styling */
+.navigation-controls {
+  display: flex;
+  align-items: center;
+  background-color: var(--card-bg);
+  border-radius: 6px;
+  padding: 0.25rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  gap: 0.5rem;
+  width: 320px; /* Fixed width */
+  height: 48px; /* Fixed height */
+  min-width: 320px; /* Prevent shrinking */
+  overflow: hidden; /* Prevent content from spilling out */
+  justify-content: space-between; /* Distribute items evenly */
+}
+
+/* Ensure buttons inside don't grow beyond their natural size */
+.navigation-controls .nav-btn {
+  flex-shrink: 0; /* Prevent buttons from shrinking */
+  flex-grow: 0; /* Prevent buttons from growing */
+}
+
+/* Make date display adapt to available space */
+.navigation-controls .current-date {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nav-btn {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-color);
+  transition: all 0.2s ease;
+}
+
+.nav-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: var(--accent-color);
+}
+
+.nav-btn.today {
+  font-size: 0.9rem;
+  font-weight: 500;
+  border-left: 1px solid var(--border-color);
+  margin-left: 0.5rem;
+  padding-left: 1rem;
+}
+
+.current-date {
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin: 0 0.5rem;
+  color: var(--text-color);
+}
+
+/* View Controls Styling - Remove background to make it transparent */
+.view-controls {
+  display: flex;
+  border-radius: 6px;
+  overflow: hidden;
+  gap: 0.5rem;
+  /* Remove the background color to make it transparent */
+  background-color: transparent;
+}
+
+.view-btn {
+  background-color: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--text-color);
+  transition: background-color 0.2s;
+  font-weight: 500;
+}
+
+.view-btn:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.view-btn.active {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+.calendar-container {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  overflow: hidden;
+}
+
+.big-calendar-container {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  padding: 1.5rem;
+  overflow: hidden;
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Custom Calendar Styles */
+.custom-calendar {
+  width: 100% !important;
+  font-family: inherit !important;
+}
+
+.custom-calendar .rbc-month-view {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+/* Month View */
+.rbc-month-view {
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  overflow: hidden;
+  width: 100%;
+  min-width: 900px;
+}
+
+.rbc-header {
+  padding: 1rem !important;
+  background-color: var(--accent-color) !important;
+  color: white !important;
+  font-weight: 500 !important;
+  border-bottom: none !important;
+  text-transform: none !important;
+  font-size: 1rem !important;
+  min-width: 120px !important;
+}
+
+.rbc-date-cell {
+  padding: 8px !important;
+  font-size: 0.95rem !important;
+  font-weight: 500 !important;
+}
+
+.custom-calendar .rbc-date-cell {
+  font-weight: 500;
+  padding-right: 8px;
+}
+
+.rbc-month-row {
+  min-height: 100px !important;
+}
+
+.rbc-day-bg {
+  min-width: 120px !important;
+}
+
+.rbc-calendar {
+  min-width: 100%;
+  overflow-x: auto !important;
+}
+
+.rbc-off-range-bg {
+  background-color: rgba(0, 0, 0, 0.03) !important;
+}
+
+.rbc-today {
+  background-color: rgba(59, 130, 246, 0.08) !important;
+}
+
+.custom-calendar .rbc-today {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.custom-calendar .rbc-today .rbc-button-link,
+.custom-calendar .rbc-today .rbc-header,
+.custom-calendar .rbc-today .rbc-day-bg {
+  color: var(--accent-color);
+  font-weight: 600;
+}
+
+.rbc-event {
+  padding: 5px 8px !important;
+  border-radius: 4px !important;
+  font-size: 0.85rem !important;
+}
+
+.custom-calendar .rbc-event {
+  border-radius: 4px;
+  padding: 2px 5px;
+  font-size: 0.85rem;
+}
+
+/* Week/Day View */
+.rbc-time-view {
+  border: 1px solid var(--border-color) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+.rbc-time-header-content {
+  border-left: none !important;
+}
+
+.custom-calendar .rbc-time-header-content .rbc-header {
+  padding: 8px 3px;
+  font-weight: 600;
+  color: var(--text-color);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.custom-calendar .rbc-time-header-content .rbc-today .rbc-header {
+  background-color: var(--accent-color);
+  color: white;
+  border-bottom: 2px solid var(--accent-color);
+}
+
+.rbc-allday-cell {
+  max-height: 60px !important;
+}
+
+.rbc-time-content {
+  border-top: 1px solid var(--border-color) !important;
+}
+
+.custom-calendar .rbc-time-content {
+  border-top: 1px solid var(--border-color);
+}
+
+/* Custom scrollbar styling for week and day views */
+.rbc-time-content::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.rbc-time-content::-webkit-scrollbar-track {
+  background: var(--card-bg);
+  border-radius: 10px;
+}
+
+.rbc-time-content::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 10px;
+  opacity: 0.7;
+}
+
+.rbc-time-content::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color-dark, var(--accent-color));
+  opacity: 1;
+}
+
+/* Also style any other scrollable elements in the calendar */
+.rbc-agenda-view::-webkit-scrollbar,
+.week-day-events::-webkit-scrollbar,
+.day-timeline::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.rbc-agenda-view::-webkit-scrollbar-track,
+.week-day-events::-webkit-scrollbar-track,
+.day-timeline::-webkit-scrollbar-track {
+  background: var(--card-bg);
+  border-radius: 10px;
+}
+
+.rbc-agenda-view::-webkit-scrollbar-thumb,
+.week-day-events::-webkit-scrollbar-thumb,
+.day-timeline::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 10px;
+  opacity: 0.7;
+}
+
+.rbc-agenda-view::-webkit-scrollbar-thumb:hover,
+.week-day-events::-webkit-scrollbar-thumb:hover,
+.day-timeline::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-color-dark, var(--accent-color));
+  opacity: 1;
+}
+
+/* Firefox scrollbar styling */
+.rbc-time-content, 
+.rbc-agenda-view,
+.week-day-events,
+.day-timeline {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) var(--card-bg);
+}
+
+.rbc-time-header-gutter {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+.rbc-timeslot-group {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+.custom-calendar .rbc-timeslot-group {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.custom-calendar .rbc-time-slot {
+  font-size: 0.85rem;
+}
+
+/* Navigation controls */
+.rbc-toolbar {
+  margin-bottom: 2rem !important;
+  flex-wrap: wrap !important;
+  justify-content: space-between !important;
+}
+
+.rbc-toolbar button {
+  color: var(--text-color) !important;
+  padding: 8px 16px !important;
+  background-color: transparent !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 4px !important;
+  margin-right: 8px !important;
+}
+
+.rbc-toolbar button:hover {
+  background-color: rgba(0, 0, 0, 0.05) !important;
+}
+
+.rbc-toolbar button.rbc-active {
+  background-color: var(--accent-color) !important;
+  color: white !important;
+}
+
+.rbc-toolbar-label {
+  font-size: 1.5rem !important;
+  font-weight: 500 !important;
+  padding: 0 1rem !important;
+}
+
+.rbc-btn-group {
+  display: flex !important;
+  gap: 5px !important;
+}
+
+/* Override popup styles */
+.rbc-overlay {
+  background-color: var(--card-bg) !important;
+  border: 1px solid var(--border-color) !important;
+  border-radius: 6px !important;
+  box-shadow: var(--card-shadow) !important;
+  padding: 10px !important;
+}
+
+.rbc-agenda-view {
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+
+/* Event Modal Styles */
+.event-modal {
+  width: 600px;
+  max-width: 90vw;
+  background-color: var(--card-bg);
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  width: 90%;
+  max-width: 600px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Month View Styles */
+.month-view .weekday-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.weekday-header div {
+  padding: 0.75rem;
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  min-height: 70vh;
+}
+
+.calendar-day {
+  border: 1px solid var(--border-color);
+  padding: 0.5rem;
+  min-height: 100px;
+  cursor: pointer;
+  transition: background-color 0.1s;
+}
+
+.calendar-day:hover {
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+.calendar-day.empty {
+  background-color: rgba(0, 0, 0, 0.02);
+  cursor: default;
+}
+
+.calendar-day.today {
+  background-color: rgba(59, 130, 246, 0.08);
+  border: 2px solid var(--accent-color);
+}
+
+.day-header {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  text-align: right;
+}
+
+.today .day-header {
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.day-events {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.event-item {
+  background-color: var(--accent-color);
+  color: white;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: transform 0.1s;
+  display: flex;
+  flex-direction: column;
+}
+
+.event-item:hover {
+  transform: translateY(-1px);
+}
+
+.event-item.cancelled {
+  background-color: #ef4444;
+  text-decoration: line-through;
+  opacity: 0.7;
+}
+
+.event-time {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+
+.event-title {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Week View Styles */
+.week-view {
+  padding: 1rem;
+}
+
+.week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1rem;
+  min-height: 60vh;
+}
+
+.week-day {
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.week-day.today {
+  border: 2px solid var(--accent-color);
+}
+
+.week-day-header {
+  background-color: rgba(0, 0, 0, 0.03);
+  padding: 0.75rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.today .week-day-header {
+  background-color: rgba(59, 130, 246, 0.1);
+}
+
+.week-day-name {
+  font-weight: 600;
+  font-size: 0.8rem;
+  margin-bottom: 0.25rem;
+}
+
+.week-day-date {
+  font-size: 1.2rem;
+  font-weight: 500;
+}
+
+.today .week-day-date {
+  color: var(--accent-color);
+  font-weight: 700;
+}
+
+.week-day-events {
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.week-event {
+  padding: 0.5rem;
+}
+
+.event-venue {
+  font-size: 0.7rem;
+  opacity: 0.8;
+  margin-top: 0.2rem;
+}
+
+/* Day View Styles */
+.day-view {
+  padding: 1rem;
+}
+
+.day-view-header {
+  text-align: center;
+  margin: 0 0 1.5rem 0;
+  color: var(--accent-color);
+  font-size: 1.2rem;
+}
+
+.day-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.day-hour {
+  display: flex;
+  min-height: 60px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.hour-label {
+  width: 100px;
+  padding: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--text-color);
+  opacity: 0.7;
+}
+
+.hour-events {
+  flex: 1;
+  padding: 0.5rem;
+}
+
+.day-event {
+  padding: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.event-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  margin-top: 0.3rem;
+}
+
+/* Event Modal Styles */
+.event-modal {
+  width: 600px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--text-color);
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.close-btn:hover {
+  opacity: 1;
+}
+
+.event-modal-content {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.event-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+
+.info-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.info-item.full-width {
+  grid-column: 1 / -1;
+}
+
+.info-label {
+  font-size: 0.8rem;
+  opacity: 0.7;
+  margin-bottom: 0.25rem;
+}
+
+.info-value {
+  font-weight: 500;
+}
+
+.info-value.description {
+  font-weight: normal;
+  line-height: 1.6;
+}
+
+.cancellation-info {
+  background-color: #fee2e2;
+  padding: 1rem;
+  border-radius: 6px;
+  margin-top: 1rem;
+}
+
+.cancellation-info h3 {
+  color: #b91c1c;
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.cancelled-badge {
+  background-color: #ef4444;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+/* Error Message Styles */
+.library-error-message {
+  background-color: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--card-shadow);
+  padding: 2rem;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.library-error-message pre {
+  background-color: rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  border-radius: 4px;
+  margin: 1rem 0;
+  display: inline-block;
+  text-align: left;
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+  .calendar-controls {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .navigation-controls, .view-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .calendar-controls {
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+  .view-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .rbc-toolbar {
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .rbc-toolbar-label {
+    margin: 10px 0;
+  }
+  
+  .month-view .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+  }
+  
+  .month-view .weekday-header {
+    display: none;
+  }
+  
+  .calendar-day {
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+  }
+  
+  .day-header {
+    width: 40px;
+    text-align: center;
+    margin-bottom: 0;
+  }
+  
+  .day-events {
+    flex: 1;
+  }
+  
+  .event-info-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .week-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .big-calendar-container {
+    height: 500px;
+    padding: 0.5rem;
+  }
+
+  .current-date {
+    font-size: 1rem;
+  }
+  
+  .rbc-header {
+    min-width: 100px !important;
+    padding: 0.75rem 0.5rem !important;
+  }
+  
+  .big-calendar-container {
+    padding: 1rem 0.5rem;
+  }
+}
+
+/* Dark mode compatibility */
+body.dark-theme .custom-calendar .rbc-today {
+  background-color: rgba(59, 130, 246, 0.25);
+}
+
+body.dark-theme .custom-calendar .rbc-today .rbc-button-link,
+body.dark-theme .custom-calendar .rbc-today .rbc-header {
+  color: #90cdf4; /* Lighter blue for dark mode */
+  font-weight: 600;
+}

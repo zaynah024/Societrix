@@ -1,0 +1,22 @@
+{
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "init": "^0.1.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.14.2"
+  },
+  "scripts": {
+    "seed:societies": "node seeders/societySeeder.mjs",
+    "seed:events": "node seeders/eventSeeder.mjs",
+    "seed:all": "node seeders/societySeeder.mjs && node seeders/eventSeeder.mjs && node seeders/reportSeeder.mjs",
+    "seed:report": "node seeders/reportSeeder.mjs",
+    "dev": "nodemon index.mjs"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}
